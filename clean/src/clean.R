@@ -1,6 +1,17 @@
+#!/usr/bin/env Rscript --vanilla
+# set expandtab ft=R ts=4 sw=4 ai fileencoding=utf-7
+#
+# Author: JR
+# Maintainer(s): JR
+# License: 2020, EICC, GPL v2 or later
+#
+# -----------------------------------------------------------
+# NCV19/clean/src/clean.R
+
 ## Cleaning code for                                               ##
-## "Comparison of multiple tests for determination of seroconversion rates to ##
-## the Chlamydia trachomatis antigen Pgp3: a multi-country analysis" ##
+## "Comparison of multiple tests for determination of              ##
+## seroconversion rates to the Chlamydia trachomatis antigen       ##
+## Pgp3: a multi-country analysis"                                 ##
 ##                                                                 ##
 ## Please feel free to share or modify the code as you see fit     ##   
 ## but please maintain appropriate accreditation)                  ##
@@ -36,70 +47,73 @@ files <- list(
   togoMBAp_42 = here("/clean/input/TogoMBAct694_40002.csv"),
   
   
-  drc1_Ct694_clean = here("/clean/output/DRC1Ct694_clean.csv"),
-  drc1_ct694agespbins = here("/clean/output/DRC1Ct694_agespbin_df.csv"),
+  drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
+  drc1_ct694agespbins = here("/model/input/DRC1Ct694_agespbin_df.csv"),
   
-  drc1_LFA_clean = here("/clean/output/DRC1LFA_clean.csv"),
-  
-  
-  
-  drc1_MBA_clean = here("/clean/output/DRC1MBA_clean.csv"),
+  drc1_LFA_clean = here("/model/input/DRC1LFA_clean.csv"),
   
   
   
-  drc2_Ct694_clean = here("/clean/output/DRC1Ct694_clean.csv"),
+  drc1_MBA_clean = here("/model/input/DRC1MBA_clean.csv"),
   
   
   
-  drc2_LFA_clean = here("/clean/output/DRC1LFA_clean.csv"),
+  drc2_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
   
   
   
-  drc2_MBA_clean = here("/clean/output/DRC1MBA_clean.csv"),
+  drc2_LFA_clean = here("/model/input/DRC1LFA_clean.csv"),
+  
+  
+  
+  drc2_MBA_clean = here("/model/input/DRC1MBA_clean.csv"),
   
   
   
   
-  togoLFAf_41_clean = here("/clean/output/TogoLFAfield_40001_clean.csv"),
+  togoLFAf_41_clean = here("/model/input/TogoLFAfield_40001_clean.csv"),
   
   
   
-  togoLFAf_42_clean = here("/clean/output/TogoLFAfield_40002_clean.csv"),
+  togoLFAf_42_clean = here("/model/input/TogoLFAfield_40002_clean.csv"),
   
   
   
-  togoLFAg_41_clean = here("/clean/output/TogoLFAgold_40001_clean.csv"), 
+  togoLFAg_41_clean = here("/model/input/TogoLFAgold_40001_clean.csv"), 
   
   
   
-  togoLFAg_42_clean = here("/clean/output/TogoLFAgold_40002_clean.csv"), 
+  togoLFAg_42_clean = here("/model/input/TogoLFAgold_40002_clean.csv"), 
   
   
   
-  togoLFAl_41_clean = here("/clean/output/TogoLFAlatex_40001_clean.csv"), 
+  togoLFAl_41_clean = here("/model/input/TogoLFAlatex_40001_clean.csv"), 
   
   
   
-  togoLFAl_42_clean = here("/clean/output/TogoLFAlatex_40002_clean.csv"),
+  togoLFAl_42_clean = here("/model/input/TogoLFAlatex_40002_clean.csv"),
   
   
   
-  togoMBAc_41_clean = here("/clean/output/TogoMBAct694_40001_clean.csv"), 
+  togoMBAc_41_clean = here("/model/input/TogoMBAct694_40001_clean.csv"), 
   
   
   
-  togoMBAc_42_clean = here("/clean/output/TogoMBAct694_40002_clean.csv"),
+  togoMBAc_42_clean = here("/model/input/TogoMBAct694_40002_clean.csv"),
   
 
   
-  togoMBAp_41_clean = here("/clean/output/TogoMBAct694_40001_clean.csv"),
+  togoMBAp_41_clean = here("/model/input/TogoMBAct694_40001_clean.csv"),
   
   
   
-  togoMBAp_42_clean = here("/clean/output/TogoMBAct694_40002_clean.csv")
+  togoMBAp_42_clean = here("/model/input/TogoMBAct694_40002_clean.csv")
 )
 
 stopifnot(is_empty(files) != TRUE & length(files) == 32)
+
+# set random seed
+seed = set.seed(22315)
 
 ## Read in data
 
@@ -128,10 +142,8 @@ N_bins <- length(age_bins) - 1
 sp_bins <- data.frame(med = numeric(0), 
                       low_95 = numeric(0), 
                       high_95 = numeric(0))
-
-# set random seed
-seed = set.seed(22315)
-
+					  
+# loop thorugh data to populate the sp_bins into a 9x3 matrix					  
 for(i in 1:N_bins)
 {
   index <- which(drc1_ct694_df$age > age_bins[i] & 
@@ -149,7 +161,6 @@ stopifnot(is_empty(sp_bins) == FALSE)
 stopifnot(nrow(sp_bins) == 9 & ncol(sp_bins) == 3)
 
 #setup data frames for plots and export
-
 sp_bins_df <- sp_bins %>%
   mutate(age = as.factor(row.names(sp_bins)))
 
@@ -162,7 +173,8 @@ age_sp_bins_df <- left_join(sp_bins_df, age_bins_mid_df, by = "age") %>%
 
 write_excel_csv(age_sp_bins_df, files$drc1_ct694agespbins)
 
-# drc1_Ct694 
+
+
 # drc1_LFA 
 # drc1_MBA 
 # drc2_Ct694 
