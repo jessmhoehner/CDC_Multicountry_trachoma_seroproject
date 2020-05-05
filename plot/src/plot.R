@@ -17,7 +17,7 @@ pacman::p_load("here", "readr", "janitor",
 
 files <- list(
   drc1_ct694agespbins = here("/clean/output/DRC1Ct694_agespbin_df.csv"), 
-  drc1_ct694agespbins_plot1 = here("/clean/output/DRC1Ct694_ageseroprev.png"))
+  drc1_ct694agespbins_plot1 = here("/plot/output/DRC1Ct694_ageseroprev.png"))
 
 stopifnot(is_empty(files) != TRUE & length(files) == 2)
 #
