@@ -1,11 +1,28 @@
-#####################################################################
-#####################################################################
+#!/usr/bin/env Rscript --vanilla
+# set expandtab ft=R ts=4 sw=4 ai fileencoding=utf-7
+#
+# Author: JR
+# Maintainer(s): JR
+# License: 2020, EICC, GPL v2 or later
+#
+# -----------------------------------------------------------
+# multicountrytrachseroproject/model/src/model.R
+
+####################################################################
+## Modeling code for                                               ##
+## "Comparison of multiple tests for determination of              ##
+## seroconversion rates to the Chlamydia trachomatis antigen       ##
+## Pgp3: a multi-country analysis"                                 ##
 ##                                                                 ##
-## CODE FOR FITTING MODELS TO CROSS-SECTIONAL ANTIBODY TITRE DATA  ##
-##                                                                 ##
-## Please feel free to share modify the code as you see fit        ##   
-## (but please maintain appropriate accreditation)                 ##
+## Please feel free to share or modify the code as you see fit     ##   
+## but please maintain appropriate accreditation)                  ##
 ##                                                                 ##   
+## Jessica Randall                                                 ##
+## github.com/jessmrandall                                         ##
+#####################################################################
+## modified from                                                   ##
+## CODE FOR FITTING MODELS TO CROSS-SECTIONAL ANTIBODY TITRE DATA  ##
+##                                                                 ## 
 ## Michael White                                                   ##
 ## Institut Pasteur                                                ##
 ## michael.white@pasteur.fr                                        ##
@@ -57,7 +74,6 @@ model_M1 = function(a, par_M1)
  
 model_M1 <- cmpfun(model_M1, options=list(optimize=3)) 
 
-
 ###################################################
 ## 1.2 LIKELIHOOD
 ## changed where the model refers to column number to specific column name
@@ -84,7 +100,7 @@ prior_M1 <- function(par)
 	lambda_0 <- par[1]
       rho      <- par[2]
 
-	######################################
+  ###################################################
 	## Uniform prior on lambda_0 ~ U(0,100)
 
 	if( lambda_0>0 && lambda_0<100 )
@@ -94,7 +110,7 @@ prior_M1 <- function(par)
 		prior_lambda_0 <- -LARGE
 	}
 
-	######################################
+  ###################################################
 	## Uniform prior on rho ~ U(0,10)
 
 	if( rho>0 && rho<10 )
@@ -117,7 +133,7 @@ N_mcmc <- 10000            ## Number of MCMC iterations
 
 MCMC_accept <- 0           ## Track the MCMC acceptance rate
 
-#################################################
+###################################################
 ## 2.2 Prepare object for MCMC fitting
 
 N_par <- 2      ## Number of parameters 
@@ -126,7 +142,7 @@ MCMC_par           <- matrix(NA, nrow=N_mcmc, ncol=N_par+2)
 colnames(MCMC_par) <- c("lambda_0", "rho", "loglike", "prior")
 # update this later
 
-#########################################################
+###################################################
 ## 2.3 Implement MCMC iterations
 
 par_MC   <- c(0.1, 0.1)       ## (lambda_0, rho)
@@ -140,21 +156,21 @@ loglike_MC <- loglike_M1( par_MC ) + prior_MC
 
 for(mc in 1:N_mcmc)
 {
-	#######################################
+  ###################################################
 	## Propose new parameter
 
 	par_MCp1[1] <- rnorm(n=1, mean=par_MC[1], sd=Sigma_MC[1])
 	par_MCp1[2] <- rnorm(n=1, mean=par_MC[2], sd=Sigma_MC[2])
 
 
- 	##############################################
+	###################################################
 	## Only proceed if not rejected by the prior
  
 	prior_MCp1 <- prior_M1(par_MCp1)
 
 	if( prior_MCp1 > -0.5*LARGE  )
 	{
-	 	##############################################
+	  ###################################################
 		## Calculate log-likelihood and use Metropolis-Hastings
 		## algorithm to accept or reject
  
@@ -173,28 +189,14 @@ for(mc in 1:N_mcmc)
 		}
 	}
 
-	#######################################
+	###################################################
 
 	MCMC_par[mc,1:N_par] <- par_MC
 	MCMC_par[mc,N_par+1] <- loglike_MC
 	MCMC_par[mc,N_par+2] <- prior_MC
 }
 
-## keep in model task ##
-
-#############################################
-#############################################
-##          ##                             ##
-##   ####   ##  ###### #####  ###  ######  ##
-##  ##  ##  ##    ##   ##    ##      ##    ##
-##     ##   ##    ##   ####   ###    ##    ##
-##  ##  ##  ##    ##   ##       ##   ##    ##
-##   ####   ##    ##   #####  ###    ##    ##
-##          ##                             ##
-#############################################
-#############################################
-
-#############################################
+###################################################
 ## 3.1 Caluclate the median of the posteriors 
 ##     and the model prediction for these
 ##     parameters
@@ -207,7 +209,7 @@ par_median <- apply(X=MCMC_burn[,1:N_par], MARGIN=2, FUN=median)
 
 M1_predict_median <- sapply(age_seq, model_M1, par=par_median)
 
-#############################################
+###################################################
 ## 3.2 Take N_sam equally spaced samples from 
 ##     the posterior and caluclate the median
 ##     posterior prediction
@@ -229,22 +231,18 @@ for(j in 1:length(age_seq))
 	M1_quant[,j] = quantile(M1_predict[,j], prob=c(0.025, 0.5, 0.975),seed = seed)
 }
 
-# export M1_quant to plot task 
-# join all of the model estimated params
-# by rownumber and export to plot task
+quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
+
+###################################################
+# join all of the estimated params and export to plot task
 
 M1_quant_df <- as.data.frame(t(M1_quant)) %>%
   transmute(medest = as.numeric(V2), 
             high95_est = as.numeric(V3), 
             low95_est = as.numeric(V1))
-M1_quant_df <- M1_quant_df %>%
-  mutate(rownum = as.numeric(rownames(M1_quant_df)))
-  
-M1_predmed_df <- as.data.frame(M1_predict_median)
-M1_predmed_df <- M1_predmed_df %>%
-  mutate(rownum = as.numeric(rownames(M1_quant_df)))
 
-M1_df <- left_join(M1_quant_df,M1_predmed_df, by = "rownum")
+M1_df <- M1_quant_df %>%
+  mutate(rownum = as.numeric(rownames(M1_quant_df)))
 
 age_seq_df <- as.data.frame(age_seq)
 age_seq_df  <- age_seq_df %>%
@@ -253,50 +251,11 @@ age_seq_df  <- age_seq_df %>%
 model_ests_df <- left_join(M1_df,
                            age_seq_df, 
                            by = "rownum") %>%
-  filter(age_seq <= 1.6) %>%
-  mutate(age = rownum)
+  filter(age_seq <= 9.0)
 
-stopifnot(nrow(model_ests_df) == 9 & ncol(model_ests_df) == 7)
+stopifnot(nrow(model_ests_df) == 46 & ncol(model_ests_df) == 5)
 stopifnot(is_empty(model_ests_df) == FALSE)
 
 write_excel_csv(model_ests_df, files$drc1_ct694_modelests)
 
-
-## move to plot task ## 
-###############################################
-## 3.3 Plot data and model prediction
- 
-par(mfrow=c(1,1))
-
-
-drc1_ct694_age_spins<- read_csv(files$drc1_ct694agespbins, col_names = TRUE, 
-                          na = "NA") %>%
-  clean_names()
-
-plot(x=drc1_ct694_age_spins$age_bins_mid, y=drc1_ct694_age_spins$med, 
-pch=15, cex=2,
-xlim=c(0,10), ylim=c(0,1),
-xlab="", ylab="", 
-main=""  )
-
-
-for(i in 1:10)
-{
-	arrows(x0=drc1_ct694_age_spins$age_bins_mid[i], 
-	       y0=drc1_ct694_age_spins$low_95[i], 
-	       x1=drc1_ct694_age_spins$age_bins_mid[i], 
-	       y1=drc1_ct694_age_spins$high_95[i], 
-             length=0.03, angle=90, code=3, col="black", lwd=1)	
-}
-
-
-# here's where the model fit is added
-points(x=model_ests_df$age_seq, y=model_ests_df$medest, 
-type='l', lwd=3, col="blue")
-
-# fit line and blue shading
-polygon(x=c(model_ests_df$age_seq, rev(model_ests_df$age_seq)), 
-y=c(model_ests_df$low95_est, rev(model_ests_df$high95_est) ),
-col=rgb(0/256,0/256,256/256,0.2), border=NA)
-
-quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
+# done 
