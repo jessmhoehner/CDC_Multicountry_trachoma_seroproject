@@ -16,18 +16,21 @@
 # load libraries 
 pacman::p_load("here", "MASS", "compiler", 
                "binom", "coda", "readr", 
-               "janitor", "purrr")
+               "janitor", "purrr", "tidyverse", "assertr")
 
 
 # specify inputs and outputs
 files <- list(drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
               drc1_ct694agespbins = 
-                here("/model/input/DRC1Ct694_agespbin_df.csv"))
+                here("/model/input/DRC1Ct694_agespbin_df.csv"), 
+              
+              drc1_ct694_modelests = 
+              here("/plot/input/DRC1Ct694_modelests.csv"))
 
-stopifnot(is_empty(files) != TRUE & length(files) == 2)
+stopifnot(is_empty(files) != TRUE & length(files) == 5)
 
 # set random seed
-seed = set.seed(22315)            
+set.seed(22315)            
 
 ## Read in data
 
@@ -35,13 +38,9 @@ seed = set.seed(22315)
 
 # DRC1_CT694
 
-AB_data <- read.csv( file="TogoLFAfield_40002.csv", header=TRUE)
-
-drc1_ct694_df <- read_csv(files$drc1_Ct694_clean, 
-                          col_names = TRUE, 
+drc1_ct694_df <- read_csv(files$drc1_Ct694_clean, col_names = TRUE, 
                           na = "NA") %>%
   clean_names()
-
 
 ################################################### 
 ## 1.1 MODEL   
@@ -63,7 +62,7 @@ model_M1 <- cmpfun(model_M1, options=list(optimize=3))
 ## 1.2 LIKELIHOOD
 ## changed where the model refers to column number to specific column name
  
-loglike_M1 <- function( par_M1 )
+loglike_M1 <- function(par_M1)
 {
 	SP_model <- sapply( drc1_ct694_df$age, model_M1, par_M1=par_M1)
 
@@ -75,13 +74,12 @@ loglike_M1 <- function( par_M1 )
 
 loglike_M1 <- cmpfun(loglike_M1, options=list(optimize=3))
 
-
 ###################################################
 ## 1.3 PRIOR
 
 LARGE = 1e10     ## Large value for rejecting parameters with prior
  
-prior_M1 <- function( par )
+prior_M1 <- function(par)
 {
 	lambda_0 <- par[1]
       rho      <- par[2]
@@ -121,12 +119,12 @@ MCMC_accept <- 0           ## Track the MCMC acceptance rate
 
 #################################################
 ## 2.2 Prepare object for MCMC fitting
-# initialize empty dataframe to fill with MCMC parameters
 
-MCMC_par <- as.matrix(data.frame(lambda_0 = numeric(0),
-                                 rho = numeric(0),
-                                 loglike = numeric(0),
-                                 prior = numeric(0)))
+N_par <- 2      ## Number of parameters 
+ 
+MCMC_par           <- matrix(NA, nrow=N_mcmc, ncol=N_par+2)
+colnames(MCMC_par) <- c("lambda_0", "rho", "loglike", "prior")
+# update this later
 
 #########################################################
 ## 2.3 Implement MCMC iterations
@@ -176,102 +174,11 @@ for(mc in 1:N_mcmc)
 	}
 
 	#######################################
-	## export as matrices
 
 	MCMC_par[mc,1:N_par] <- par_MC
 	MCMC_par[mc,N_par+1] <- loglike_MC
 	MCMC_par[mc,N_par+2] <- prior_MC
 }
-
-
-
-#########################################################
-## 2.4 Examine MCMC chains
-
-# move to plot task and plot in tidyverse
- 
-par(mfrow=c(3,3))
-
-for(j in 1:N_par)
-{
-	#####################################
-	## PANEL j: MCMC chain
-
-	plot(x=1:N_mcmc, y=MCMC_par[,j], 
-	pch=19, col="grey", cex=0.25,
-	xlab="MCMC iteration", ylab=colnames(MCMC_par)[j], 
-	main=paste("MCMC chain: ", colnames(MCMC_par)[j], " (ESS = ", 
-	           round(effectiveSize(MCMC_par[,j]),0), ")",  sep="") )
-}
-
-#####################################
-## PANEL 3: MCMC log-likelihood
-
-plot(x=1:N_mcmc, y=MCMC_par[,3], 
-pch=19, col="grey", cex=0.25,
-ylim=quantile(MCMC_par[,3], prob=c(0.01,1)),
-xlab="MCMC iteration", ylab="log-likelihood", 
-main="log-likelihood" )
-
-
-
-#########################################################
-## 2.5 Examine posterior distribution
- 
-MCMC_burn <- MCMC_par[floor(0.2*nrow(MCMC_par)):(nrow(MCMC_par)-1),]
-
-for(j in 1:N_par)
-{
-	#####################################
-	## PANEL j: MCMC posterior
-
-	DEN <- density( MCMC_burn[,j] )
-	
-	QUANT <- quantile( MCMC_burn[,j], prob=c(0.025, 0.5, 0.975) )
-
-	plot(x=DEN$x, y=DEN$y, type='l',
-	xlim=c(0, max(DEN$x)),
-	xlab=colnames(MCMC_par)[j], ylab="", 
-	main=paste("Posterior profile: ", colnames(MCMC_par)[j], sep="") )
-
-	
-	low_index  = which(DEN$x<QUANT[1])
-	mid_index  = intersect( which(DEN$x>=QUANT[1]), which(DEN$x<=QUANT[3]) )
-	high_index = which(DEN$x>QUANT[3])
-
-	polygon( x=c( DEN$x[low_index], rev(DEN$x[low_index]) ),
-		   y=c( rep(0,length(low_index)), rev(DEN$y[low_index]) ), 
-	             col="pink")
-
-	polygon( x=c( DEN$x[mid_index], rev(DEN$x[mid_index]) ),
-		   y=c( rep(0,length(mid_index)), rev(DEN$y[mid_index]) ), 
-	         col="grey")
-
-	polygon( x=c( DEN$x[high_index], rev(DEN$x[high_index]) ),
-		   y=c( rep(0,length(high_index)), rev(DEN$y[high_index]) ), 
-		   col="pink")
-
-	points(x=rep(QUANT[2],2), y=c(0,max(DEN$y)), type='l', lty="dashed", lwd=2)
-}
-
-
-plot.new()
-
-
-#########################################################
-## 2.6 Auto-correlation
-
-for(j in 1:N_par)
-{
-	autocorr.plot( MCMC_par[,j], auto.layout=FALSE, 
-                     main=paste("Auto-correlation: ", colnames(MCMC_par)[j]) )
-}
-
-plot.new()
-
-
-
-paste( "Acceptance rate = ", round(100*MCMC_accept/N_mcmc,2), "%", sep="" )
 
 ## keep in model task ##
 
@@ -292,12 +199,13 @@ paste( "Acceptance rate = ", round(100*MCMC_accept/N_mcmc,2), "%", sep="" )
 ##     and the model prediction for these
 ##     parameters
 
+MCMC_burn <- MCMC_par[floor(0.2*nrow(MCMC_par)):(nrow(MCMC_par)-1),]
+
 age_seq <- seq(from=0, to=70, by=0.2)
 
 par_median <- apply(X=MCMC_burn[,1:N_par], MARGIN=2, FUN=median)
 
 M1_predict_median <- sapply(age_seq, model_M1, par=par_median)
-
 
 #############################################
 ## 3.2 Take N_sam equally spaced samples from 
@@ -318,8 +226,41 @@ for(k in 1:N_sam)
 M1_quant = matrix(NA, nrow=3, ncol=length(age_seq))
 for(j in 1:length(age_seq))
 {
-	M1_quant[,j] = quantile( M1_predict[,j], prob=c(0.025, 0.5, 0.975) )
+	M1_quant[,j] = quantile(M1_predict[,j], prob=c(0.025, 0.5, 0.975),seed = seed)
 }
+
+# export M1_quant to plot task 
+# join all of the model estimated params
+# by rownumber and export to plot task
+
+M1_quant_df <- as.data.frame(t(M1_quant)) %>%
+  transmute(medest = as.numeric(V2), 
+            high95_est = as.numeric(V3), 
+            low95_est = as.numeric(V1))
+M1_quant_df <- M1_quant_df %>%
+  mutate(rownum = as.numeric(rownames(M1_quant_df)))
+  
+M1_predmed_df <- as.data.frame(M1_predict_median)
+M1_predmed_df <- M1_predmed_df %>%
+  mutate(rownum = as.numeric(rownames(M1_quant_df)))
+
+M1_df <- left_join(M1_quant_df,M1_predmed_df, by = "rownum")
+
+age_seq_df <- as.data.frame(age_seq)
+age_seq_df  <- age_seq_df %>%
+  mutate(rownum = as.numeric(rownames(M1_quant_df)))
+
+model_ests_df <- left_join(M1_df,
+                           age_seq_df, 
+                           by = "rownum") %>%
+  filter(age_seq <= 1.6) %>%
+  mutate(age = rownum)
+
+stopifnot(nrow(model_ests_df) == 9 & ncol(model_ests_df) == 7)
+stopifnot(is_empty(model_ests_df) == FALSE)
+
+write_excel_csv(model_ests_df, files$drc1_ct694_modelests)
+
 
 ## move to plot task ## 
 ###############################################
@@ -328,32 +269,34 @@ for(j in 1:length(age_seq))
 par(mfrow=c(1,1))
 
 
-plot(x=age_bins_mid, y=SP_bins[,1], 
+drc1_ct694_age_spins<- read_csv(files$drc1_ct694agespbins, col_names = TRUE, 
+                          na = "NA") %>%
+  clean_names()
+
+plot(x=drc1_ct694_age_spins$age_bins_mid, y=drc1_ct694_age_spins$med, 
 pch=15, cex=2,
 xlim=c(0,10), ylim=c(0,1),
 xlab="", ylab="", 
 main=""  )
 
 
-for(i in 1:N_bins)
+for(i in 1:10)
 {
-	arrows(x0=age_bins_mid[i], y0=SP_bins[i,2], 
-             x1=age_bins_mid[i], y1=SP_bins[i,3], 
+	arrows(x0=drc1_ct694_age_spins$age_bins_mid[i], 
+	       y0=drc1_ct694_age_spins$low_95[i], 
+	       x1=drc1_ct694_age_spins$age_bins_mid[i], 
+	       y1=drc1_ct694_age_spins$high_95[i], 
              length=0.03, angle=90, code=3, col="black", lwd=1)	
 }
 
 
-
-points(x=age_seq, y=M1_quant[2,], 
+# here's where the model fit is added
+points(x=model_ests_df$age_seq, y=model_ests_df$medest, 
 type='l', lwd=3, col="blue")
 
-polygon(x=c(age_seq, rev(age_seq)), 
-y=c( M1_quant[1,], rev(M1_quant[3,]) ),
+# fit line and blue shading
+polygon(x=c(model_ests_df$age_seq, rev(model_ests_df$age_seq)), 
+y=c(model_ests_df$low95_est, rev(model_ests_df$high95_est) ),
 col=rgb(0/256,0/256,256/256,0.2), border=NA)
 
-
-
-points(x=age_seq, y=M1_predict_median, 
-type='l', lwd=3, col="blue", lty="dashed")
-
-quantile( MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
+quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
