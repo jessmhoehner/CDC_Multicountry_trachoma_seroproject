@@ -48,7 +48,8 @@ files <- list(
   
   
   drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
-  drc1_ct694agespbins = here("/plot/input/DRC1Ct694_agespbin_df.csv"),
+  drc1_ct694_aa_obsdf = here("/plot/input/DRC1Ct694_ageadj_obs_df.csv"),
+  ageweights_drc_clean = here("/model/input/DRC_ageweights_clean.csv"),
   
   drc1_LFA_clean = here("/model/input/DRC1LFA_clean.csv"),
   
@@ -112,9 +113,7 @@ files <- list(
 
 stopifnot(is_empty(files) != TRUE & length(files) == 32)
 
-# set random seed
-seed = set.seed(22315)
-
+###########################################################################
 ## Read in data
 
 # DRC
@@ -128,9 +127,6 @@ drc1_ct694_df %>%
   verify(ncol(drc1_ct694_df) == 3 & nrow(drc1_ct694_df) == 1496) %>%
   verify(is.na(drc1_ct694_df) == FALSE) %>%
   write_excel_csv(files$drc1_Ct694_clean)
-
-# add in age weighting here, look in "fitted_model_output for DRC1" on the 
-# bottom left hand side (~ line 18)
 
 # age bin the data for plotting
 age_bins <- seq(from=0, to=10, by=1)
@@ -160,6 +156,8 @@ for(i in 1:N_bins)
 stopifnot(is_empty(sp_bins) == FALSE)
 stopifnot(nrow(sp_bins) == 9 & ncol(sp_bins) == 3)
 
+##########################################################
+
 #setup data frames for plots and export
 sp_bins_df <- sp_bins %>%
   mutate(age = as.factor(row.names(sp_bins)))
@@ -171,8 +169,32 @@ age_bins_mid_df <- as.data.frame(age_bins_mid) %>%
 age_sp_bins_df <- left_join(sp_bins_df, age_bins_mid_df, by = "age") %>%
   mutate(age = as.numeric(age))
 
-write_excel_csv(age_sp_bins_df, files$drc1_ct694agespbins)
+# age weights obtained from Tropical Data###################
 
+age	<- as.numeric(c(1,2,3,4,5,6,7,8,9))
+
+weights <- as.numeric(c(0.10691605, 0.10691605, 0.10691605, 0.10691605, 
+                        0.11446716, 0.11446716, 0.11446716, 0.11446716, 
+                        0.11446716))
+
+age_weights_drc <- data.frame(age, weights) %>%
+  write_excel_csv(files$ageweights_drc_clean)
+
+##########################################################
+
+# adjust data by age weights
+# age weight * med/med est
+# age weight * lcl/lcl est 
+# age weight * lcl/ucl est
+
+age_adj_obs_data <- age_sp_bins_df %>%
+  mutate(aa_med = med*age_weights_drc$weights, 
+         aa_low95 = low_95*age_weights_drc$weights, 
+         aa_high95 = high_95*age_weights_drc$weights)
+
+write_excel_csv(age_adj_obs_data, files$drc1_ct694_aa_obsdf)
+
+##########################################################
 
 
 # drc1_LFA 
