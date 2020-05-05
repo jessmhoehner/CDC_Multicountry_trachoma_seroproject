@@ -48,7 +48,7 @@ files <- list(
   
   
   drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
-  drc1_ct694agespbins = here("/model/input/DRC1Ct694_agespbin_df.csv"),
+  drc1_ct694agespbins = here("/plot/input/DRC1Ct694_agespbin_df.csv"),
   
   drc1_LFA_clean = here("/model/input/DRC1LFA_clean.csv"),
   
