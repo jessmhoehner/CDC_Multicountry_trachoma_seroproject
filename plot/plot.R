@@ -17,31 +17,53 @@ pacman::p_load("here", "readr", "janitor",
 
 files <- list(
   drc1_ct694agespbins = here("/clean/output/DRC1Ct694_agespbin_df.csv"), 
-  drc1_ct694agespbins_plot1 = here("/plot/output/DRC1Ct694_ageseroprev.png"))
+  drc1_ct694agespbins_plot1 = here("/plot/output/DRC1Ct694_ageseroprev.png"),
+  drc1_ct694_modelests = 
+    here("/plot/input/DRC1Ct694_modelests.csv"))
 
-stopifnot(is_empty(files) != TRUE & length(files) == 2)
-#
+stopifnot(is_empty(files) != TRUE & length(files) == 3)
 
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
 # DRC1_Ct694 plot 1 
 # read in age_sp_bindf
 drc1_ct694_plot1_df <- read_csv(files$drc1_ct694agespbins, 
-                          col_names = TRUE, na = "NA") %>%
+                                col_names = TRUE, na = "NA") %>%
   clean_names()
 
+drc1_ct694_plot1_df <- drc1_ct694_plot1_df %>%
+  mutate(rownum = as.numeric(row.names(drc1_ct694_plot1_df)))
+
+drc1_ct694_ests_df <- read_csv(files$drc1_ct694_modelests, 
+                                col_names = TRUE, na = "NA") %>%
+  clean_names()
+
+model_plot_df <- full_join(drc1_ct694_plot1_df , drc1_ct694_ests_df, 
+                           by = "rownum")
+
 #plot age sero prev curve with error bars
-(drc_1_ct694_1 <- ggplot(drc1_ct694_plot1_df, aes(age, med, age_bins_mid)) +
-  geom_pointrange(aes(group = age_bins_mid, 
-                      ymin=med-low_95, 
-                      ymax=med+high_95)) +
-  geom_errorbar(aes(ymin=med-low_95, ymax=med+high_95), 
-                colour="black", width=.1, position=pd) +
+(drc_1_ct694_1 <- ggplot(model_plot_df, aes(age, med, age_bins_mid)) +
+  geom_pointrange(aes(ymin=low_95, 
+                      ymax=high_95)) +
+  geom_errorbar(aes(ymin=low_95,
+                    ymax=high_95), 
+                colour="black", 
+                width=.1, 
+                position=pd) +
+  geom_line(aes(age_seq, medest), 
+            color = "blue", 
+            position=pd) +
+  geom_ribbon(aes(age_seq,
+                  ymin = low95_est, 
+                  ymax = high95_est), 
+              fill = "blue", 
+              position=pd, 
+              alpha = 0.2) + 
   theme_classic() +
-  labs(title = "Seroprevalence Across Age Groups", 
-       subtitle = "DRC_1 Ct694 with 95% Confidence Interval Error Bars") +
+  labs(title = "Antibody Positivity Across Age Groups", 
+       subtitle = "DRC (Manono) Ct694 with 95% Confidence Interval Error Bars") +
   xlab("Age") +
-  ylab("Seroprevalence") + 
+  ylab("Percent Antibody Positive") + 
   ylim(0, 1.0) +
   scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)))
 
