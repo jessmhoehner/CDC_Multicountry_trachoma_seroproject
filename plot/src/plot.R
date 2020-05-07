@@ -23,13 +23,13 @@
 
 # load libraries 
 pacman::p_load("here", "readr", "janitor", 
-               "tidyverse", "assertr", "ggplot2", "ggthemes", "gridExtra")
+               "tidyverse", "assertr", "ggplot2")
 
 # specify file structure of inputs and outputs
 # change to the plot/input/ in final runs
 
 files <- list(
-  drc1_ct694agespbins = here("/plot/input/DRC1Ct694_agespbin_df.csv"), 
+  drc1_ct694_observed = here("/plot/input/DRC1Ct694_observed_df.csv"), 
   drc1_ct694_modelests = 
     here("/plot/input/DRC1Ct694_modelests.csv"),
   
@@ -43,7 +43,7 @@ pd <- position_dodge(0.1) # move them .05 to the left and right
 
 # DRC1_Ct694 plot 1 
 # read in observed data
-drc1_ct694_plot1_df <- read_csv(files$drc1_ct694agespbins, 
+drc1_ct694_plot1_df <- read_csv(files$drc1_ct694_observed, 
                                 col_names = TRUE, na = "NA") %>%
   clean_names()
 
