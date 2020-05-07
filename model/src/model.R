@@ -38,13 +38,10 @@ pacman::p_load("here", "MASS", "compiler",
 
 # specify inputs and outputs
 files <- list(drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
-              drc1_ct694agespbins = 
-                here("/model/input/DRC1Ct694_agespbin_df.csv"), 
-              
               drc1_ct694_modelests = 
                 here("/plot/input/DRC1Ct694_modelests.csv"))
 
-stopifnot(is_empty(files) != TRUE & length(files) == 5)
+stopifnot(is_empty(files) != TRUE & length(files) == 2)
 
 # set random seed
 set.seed(22315)            
