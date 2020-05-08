@@ -37,25 +37,121 @@ pacman::p_load("here", "MASS", "compiler",
 
 
 # specify inputs and outputs
-files <- list(drc1_Ct694_clean = here("/model/input/DRC1Ct694_clean.csv"),
-              drc1_ct694_modelests = 
-                here("/plot/input/DRC1Ct694_modelests.csv"))
+files <- list(
+  drc1_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
+  drc1_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
+  drc1_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
+  drc2_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
+  drc2_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
+  drc2_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
+  togoLFAf_41_cleanmod = here("/model/input/TogoLFAfield_40001_cleanmod.csv"),
+  togoLFAf_42_cleanmod = here("/model/input/TogoLFAfield_40002_cleanmod.csv"),
+  togoLFAg_41_cleanmod = here("/model/input/TogoLFAgold_40001_cleanmod.csv"),
+  togoLFAg_42_cleanmod = here("/model/input/TogoLFAgold_40002_cleanmod.csv"), 
+  togoLFAl_41_cleanmod = here("/model/input/TogoLFAlatex_40001_cleanmod.csv"), 
+  togoLFAl_42_cleanmod = here("/model/input/TogoLFAlatex_40002_cleanmod.csv"),
+  togoMBAc_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
+  togoMBAc_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
+  togoMBAp_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
+  togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
+  
+  drc1_ct694_modelests = here("/plot/input/DRC1Ct694_modelests.csv"),
+  drc1_LFA_modelests = here("/plot/input/DRC1LFA_modelests.csv"),
+  drc1_MBA_modelests = here("/plot/input/DRC1MBA_modelests.csv"),
+  drc2_Ct694_modelests = here("/plot/input/DRC1Ct694_modelests.csv"),
+  drc2_LFA_modelests = here("/plot/input/DRC1LFA_modelests.csv"),
+  drc2_MBA_modelests = here("/plot/input/DRC1MBA_modelests.csv"),
+  togoLFAf_41_modelests = here("/plot/input/TogoLFAfield_40001_modelests.csv"),
+  togoLFAf_42_modelests = here("/plot/input/TogoLFAfield_40002_modelests.csv"),
+  togoLFAg_41_modelests = here("/plot/input/TogoLFAgold_40001_modelests.csv"),
+  togoLFAg_42_modelests = here("/plot/input/TogoLFAgold_40002_modelests.csv"), 
+  togoLFAl_41_modelests = here("/plot/input/TogoLFAlatex_40001_modelests.csv"), 
+  togoLFAl_42_modelests = here("/plot/input/TogoLFAlatex_40002_modelests.csv"),
+  togoMBAc_41_modelests = here("/plot/input/TogoMBAct694_40001_modelests.csv"),
+  togoMBAc_42_modelests = here("/plot/input/TogoMBAct694_40002_modelests.csv"),
+  togoMBAp_41_modelests = here("/plot/input/TogoMBAct694_40001_modelests.csv"),
+  togoMBAp_42_modelests = here("/plot/input/TogoMBAct694_40002_modelests.csv")
+  )
 
-stopifnot(is_empty(files) != TRUE & length(files) == 2)
+stopifnot(is_empty(files) != TRUE & length(files) == 32)
 
 # set random seed
 set.seed(22315)            
-
+seed = 22315
 ## Read in data
 
-# DRC
+### DRC ###
+###)
+drc1_ct694 <- as.data.frame(read_csv(files[[1]]))
+drc1_ct694 <- drc1_ct694  %>%
+  verify(nrow(drc1_ct694) == 1496)
+### 
+drc1_LFA <- as.data.frame(read_csv(files[[2]]))
+drc1_LFA <- drc1_LFA %>%
+  verify(nrow(drc1_LFA) == 1494)
+###
+drc1_MBA <- as.data.frame(read_csv(files[[3]])) 
+drc1_MBA <- drc1_MBA %>%
+  verify(nrow(drc1_MBA) == 1496)
+###
+drc2_Ct694 <- as.data.frame(read_csv(files[[4]]))
+drc2_Ct694  <- drc2_Ct694 %>%
+  verify(nrow(drc2_Ct694) == 1496)
+###
+drc2_LFA <- as.data.frame(read_csv(files[[5]])) 
+drc2_LFA <- drc2_LFA %>%
+  verify(nrow(drc2_LFA) == 1494)
+###
+drc2_MBA <- as.data.frame(read_csv(files[[6]])) 
+drc2_MBA <- drc2_MBA %>%
+  verify(nrow(drc2_MBA) == 1496)
+###
 
-# DRC1_CT694
+###Togo###
+###
+togoLFAf41 <- as.data.frame(read_csv(files[[7]])) 
+togoLFAf41 <- togoLFAf41 %>%
+  verify(nrow(togoLFAf41) == 972)
 
-drc1_ct694_df <- read_csv(files$drc1_Ct694_clean, col_names = TRUE, 
-                          na = "NA") %>%
-  clean_names()
+### 
+togoLFAf42 <- as.data.frame(read_csv(files[[8]])) 
+togoLFAf42 <- togoLFAf42 %>%
+  verify(nrow(togoLFAf42) == 945)
+###
+togoLFAg41 <- as.data.frame(read_csv(files[[9]])) 
+togoLFAg41 <- togoLFAg41 %>%
+  verify(nrow(togoLFAg41) == 1507)
+###
+togoLFAg42 <- as.data.frame(read_csv(files[[10]])) 
+togoLFAg42 <- togoLFAg42 %>%
+  verify(nrow(togoLFAg42) == 1305)
+###
+togoLFAl41 <- as.data.frame(read_csv(files[[11]])) 
+togoLFAl41 <- togoLFAl41 %>%
+  verify(nrow(togoLFAl41) == 1509)
+###
+togoLFAl42 <- as.data.frame(read_csv(files[[12]])) 
+togoLFAl42 <- togoLFAl42 %>%
+  verify(nrow(togoLFAl42) == 1187)
+###
+togoMBAc41 <- as.data.frame(read_csv(files[[13]])) 
+togoMBAc41<- togoMBAc41 %>%
+  verify(nrow(togoMBAc41) == 1513)
+###
+togoMBAc42 <- as.data.frame(read_csv(files[[14]])) 
+togoMBAc42 <- togoMBAc42 %>%
+  verify(nrow(togoMBAc42) == 1397)
+###
+togoMBAp41 <- as.data.frame(read_csv(files[[15]])) 
+togoMBAp41 <- togoMBAp41 %>%
+  verify(nrow(togoMBAp41) == 1513)
+###
+togoMBAp42 <- as.data.frame(read_csv(files[[16]])) 
+togoMBAp42 <- togoMBAp42 %>%
+  verify(nrow(togoMBAp42) == 1397) 
+#############################################
 
+#DRC
 ################################################### 
 ## 1.1 MODEL   
 
@@ -75,12 +171,13 @@ model_M1 <- cmpfun(model_M1, options=list(optimize=3))
 ## 1.2 LIKELIHOOD
 ## changed where the model refers to column number to specific column name
 
+#DRC-ct694
 loglike_M1 <- function(par_M1)
 {
-  SP_model <- sapply( drc1_ct694_df$age, model_M1, par_M1=par_M1)
+  SP_model <- sapply( drc1_ct694$age, model_M1, par_M1=par_M1)
   
-  loglike <- drc1_ct694_df$sero_pos*log(SP_model) + 
-    (1-drc1_ct694_df$sero_pos)*log(1-SP_model)
+  loglike <- drc1_ct694$sero_pos*log(SP_model) + 
+    (1-drc1_ct694$sero_pos)*log(1-SP_model)
   
   sum(loglike)
 }
@@ -252,8 +349,11 @@ model_ests_df <- left_join(M1_df,
 
 stopifnot(nrow(model_ests_df) == 46 & ncol(model_ests_df) == 5)
 stopifnot(is_empty(model_ests_df) == FALSE)
-#model_ests_df[2,1] == 0.01980958
 
 write_excel_csv(model_ests_df, files$drc1_ct694_modelests)
+
+#this all works, just need to get it all in a loop for the other dataframes
+# idea: could I run them all in one df with a unique identifier and then break 
+# up the results once they're in the plot task? explore tomorrow
 
 # done 
