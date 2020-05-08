@@ -75,7 +75,7 @@ dfs <- lapply(files, function(x) {
 # add names for each df in the list corresponding to appropriate names for each
 # spreadheet, in this case country and associated unit and assay information
 
-df_names <- c("drc1_Ct694" , "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
+df_names <- c("drc1_Ct694", "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
               "drc2_MBA", "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
               "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", "togoMBAc_41", 
               "togoMBAc_42", "togoMBAp_41", "togoMBAp_42")
@@ -94,7 +94,7 @@ for (i in seq_along(dfs)) {
   
 { df <- data.frame()
   for (k in seq_along(dfs)){
-    df <- purrr::pluck(dfs, k)
+    df <- pluck(dfs, k)
   }
 
 #messages for the user to keep them aware of model progress
@@ -301,8 +301,8 @@ model_ests_df <- as.data.frame(left_join(M1_df,
 # name it appropriately, and export it to the plot task 
 
 write_excel_csv(model_ests_df, quote = FALSE, 
-                path = here(paste("plot/input/",names(dfs)[i], 
-                                  "_model_ests_df.csv")))
+                path = 
+                  here(paste("plot/input/",names(dfs)[i],"_model_ests_df.csv")))
 cat("*")
 }
 
