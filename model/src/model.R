@@ -55,22 +55,8 @@ files <- list(
   togoMBAp_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
   togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
   
-  drc1_ct694_modelests = here("/plot/input/DRC1Ct694_modelests.csv"),
-  drc1_LFA_modelests = here("/plot/input/DRC1LFA_modelests.csv"),
-  drc1_MBA_modelests = here("/plot/input/DRC1MBA_modelests.csv"),
-  drc2_Ct694_modelests = here("/plot/input/DRC1Ct694_modelests.csv"),
-  drc2_LFA_modelests = here("/plot/input/DRC1LFA_modelests.csv"),
-  drc2_MBA_modelests = here("/plot/input/DRC1MBA_modelests.csv"),
-  togoLFAf_41_modelests = here("/plot/input/TogoLFAfield_40001_modelests.csv"),
-  togoLFAf_42_modelests = here("/plot/input/TogoLFAfield_40002_modelests.csv"),
-  togoLFAg_41_modelests = here("/plot/input/TogoLFAgold_40001_modelests.csv"),
-  togoLFAg_42_modelests = here("/plot/input/TogoLFAgold_40002_modelests.csv"), 
-  togoLFAl_41_modelests = here("/plot/input/TogoLFAlatex_40001_modelests.csv"), 
-  togoLFAl_42_modelests = here("/plot/input/TogoLFAlatex_40002_modelests.csv"),
-  togoMBAc_41_modelests = here("/plot/input/TogoMBAct694_40001_modelests.csv"),
-  togoMBAc_42_modelests = here("/plot/input/TogoMBAct694_40002_modelests.csv"),
-  togoMBAp_41_modelests = here("/plot/input/TogoMBAct694_40001_modelests.csv"),
-  togoMBAp_42_modelests = here("/plot/input/TogoMBAct694_40002_modelests.csv")
+  plotdata = here(paste("plot/input/",names(dfs)[i], "_model_ests_df.csv"))
+
   )
 
 stopifnot(is_empty(files) != TRUE & length(files) == 32)
@@ -80,80 +66,57 @@ set.seed(22315)
 seed = 22315
 ## Read in data
 
-### DRC ###
-###)
-drc1_ct694 <- as.data.frame(read_csv(files[[1]]))
-drc1_ct694 <- drc1_ct694  %>%
-  verify(nrow(drc1_ct694) == 1496)
-### 
-drc1_LFA <- as.data.frame(read_csv(files[[2]]))
-drc1_LFA <- drc1_LFA %>%
-  verify(nrow(drc1_LFA) == 1494)
-###
-drc1_MBA <- as.data.frame(read_csv(files[[3]])) 
-drc1_MBA <- drc1_MBA %>%
-  verify(nrow(drc1_MBA) == 1496)
-###
-drc2_Ct694 <- as.data.frame(read_csv(files[[4]]))
-drc2_Ct694  <- drc2_Ct694 %>%
-  verify(nrow(drc2_Ct694) == 1496)
-###
-drc2_LFA <- as.data.frame(read_csv(files[[5]])) 
-drc2_LFA <- drc2_LFA %>%
-  verify(nrow(drc2_LFA) == 1494)
-###
-drc2_MBA <- as.data.frame(read_csv(files[[6]])) 
-drc2_MBA <- drc2_MBA %>%
-  verify(nrow(drc2_MBA) == 1496)
-###
+## creates a list of all files
+filelist <- list(files$drc1_Ct694_cleanmod , files$drc1_LFA_cleanmod, files$drc1_MBA_cleanmod, 
+                  files$drc2_Ct694_cleanmod, files$drc2_LFA_cleanmod, files$drc2_MBA_cleanmod, 
+                  files$togoLFAf_41_cleanmod, files$togoLFAf_42_cleanmod, files$togoLFAg_41_cleanmod, 
+                  files$togoLFAg_42_cleanmod, files$togoLFAl_41_cleanmod, files$togoLFAl_42_cleanmod, 
+                  files$togoMBAc_41_cleanmod, files$togoMBAc_42_cleanmod, files$togoMBAp_41_cleanmod, 
+                  files$togoMBAp_42_cleanmod)
 
-###Togo###
-###
-togoLFAf41 <- as.data.frame(read_csv(files[[7]])) 
-togoLFAf41 <- togoLFAf41 %>%
-  verify(nrow(togoLFAf41) == 972)
+stopifnot(length(filelist) == 16)
 
-### 
-togoLFAf42 <- as.data.frame(read_csv(files[[8]])) 
-togoLFAf42 <- togoLFAf42 %>%
-  verify(nrow(togoLFAf42) == 945)
-###
-togoLFAg41 <- as.data.frame(read_csv(files[[9]])) 
-togoLFAg41 <- togoLFAg41 %>%
-  verify(nrow(togoLFAg41) == 1507)
-###
-togoLFAg42 <- as.data.frame(read_csv(files[[10]])) 
-togoLFAg42 <- togoLFAg42 %>%
-  verify(nrow(togoLFAg42) == 1305)
-###
-togoLFAl41 <- as.data.frame(read_csv(files[[11]])) 
-togoLFAl41 <- togoLFAl41 %>%
-  verify(nrow(togoLFAl41) == 1509)
-###
-togoLFAl42 <- as.data.frame(read_csv(files[[12]])) 
-togoLFAl42 <- togoLFAl42 %>%
-  verify(nrow(togoLFAl42) == 1187)
-###
-togoMBAc41 <- as.data.frame(read_csv(files[[13]])) 
-togoMBAc41<- togoMBAc41 %>%
-  verify(nrow(togoMBAc41) == 1513)
-###
-togoMBAc42 <- as.data.frame(read_csv(files[[14]])) 
-togoMBAc42 <- togoMBAc42 %>%
-  verify(nrow(togoMBAc42) == 1397)
-###
-togoMBAp41 <- as.data.frame(read_csv(files[[15]])) 
-togoMBAp41 <- togoMBAp41 %>%
-  verify(nrow(togoMBAp41) == 1513)
-###
-togoMBAp42 <- as.data.frame(read_csv(files[[16]])) 
-togoMBAp42 <- togoMBAp42 %>%
-  verify(nrow(togoMBAp42) == 1397) 
-#############################################
+#testlist <- list(files$drc1_Ct694_cleanmod, files$drc1_LFA_cleanmod)
 
-#DRC
-################################################### 
-## 1.1 MODEL   
+dfs <- lapply(filelist, function(x) {
+  
+  x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
+  clean_names()
+  
+  x_df  %>%
+    verify(ncol(x_df) == 3) %>%
+    verify(is.na(x_df) == FALSE) %>%
+    transmute(age = age, 
+              titre = titre, 
+              sero_pos = sero_pos)
+})
+
+# add names for each df in the list corresponding to appropriate names for each
+# spreadheet, in this case country, number/unit, and associated assay information
+
+df_names <- c(drc1_Ct694 , drc1_LFA, drc1_MBA, 
+              drc2_Ct694, drc2_LFA, drc2_MBA, 
+              togoLFAf_41, togoLFAf_42, togoLFAg_41, 
+              togoLFAg_42, togoLFAl_41, togoLFAl_42, 
+              togoMBAc_41, togoMBAc_42, togoMBAp_41, 
+              togoMBAp_42)
+
+names(dfs) <- df_names
+
+## have a list of dataframes, want to extract each df
+## run it through the model
+## save and export result ##
+
+## 1.1 MODEL  
+
+
+for (i in seq_along(dfs)) {
+  
+{ df <- data.frame()
+  for (k in seq_along(dfs)){
+    df <- purrr::pluck(dfs, k)
+  }
+  
 
 model_M1 = function(a, par_M1)
 {
@@ -174,10 +137,10 @@ model_M1 <- cmpfun(model_M1, options=list(optimize=3))
 #DRC-ct694
 loglike_M1 <- function(par_M1)
 {
-  SP_model <- sapply( drc1_ct694$age, model_M1, par_M1=par_M1)
+  SP_model <- sapply(df[,1], model_M1, par_M1=par_M1)
   
-  loglike <- drc1_ct694$sero_pos*log(SP_model) + 
-    (1-drc1_ct694$sero_pos)*log(1-SP_model)
+  loglike <- df[,3]*log(SP_model) + 
+    (1-df[,3])*log(1-SP_model)
   
   sum(loglike)
 }
@@ -234,7 +197,6 @@ N_par <- 2      ## Number of parameters
 
 MCMC_par           <- matrix(NA, nrow=N_mcmc, ncol=N_par+2)
 colnames(MCMC_par) <- c("lambda_0", "rho", "loglike", "prior")
-# update this later
 
 ###################################################
 ## 2.3 Implement MCMC iterations
@@ -342,18 +304,19 @@ age_seq_df <- as.data.frame(age_seq)
 age_seq_df  <- age_seq_df %>%
   mutate(rownum = as.numeric(rownames(M1_quant_df)))
 
-model_ests_df <- left_join(M1_df,
+model_ests_df <- as.data.frame(left_join(M1_df,
                            age_seq_df, 
-                           by = "rownum") %>%
+                           by = "rownum")) %>%
   filter(age_seq <= 9.0)
 
-stopifnot(nrow(model_ests_df) == 46 & ncol(model_ests_df) == 5)
-stopifnot(is_empty(model_ests_df) == FALSE)
+# iterates over each df, names it appropriately, and exports it to the plot task
 
-write_excel_csv(model_ests_df, files$drc1_ct694_modelests)
+write_excel_csv(model_ests_df, quote = FALSE, 
+                path = files$plotdata)
+cat("*")
+}
 
-#this all works, just need to get it all in a loop for the other dataframes
-# idea: could I run them all in one df with a unique identifier and then break 
-# up the results once they're in the plot task? explore tomorrow
+}
+
 
 # done 
