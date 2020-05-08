@@ -53,9 +53,7 @@ files <- list(
   togoMBAc_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
   togoMBAc_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
   togoMBAp_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
-  
-  plotdata = here(paste("plot/input/",names(dfs)[i], "_model_ests_df.csv"))
+  togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv")
 
   )
 
@@ -67,12 +65,14 @@ seed = 22315
 ## Read in data
 
 ## creates a list of all files
-filelist <- list(files$drc1_Ct694_cleanmod , files$drc1_LFA_cleanmod, files$drc1_MBA_cleanmod, 
-                  files$drc2_Ct694_cleanmod, files$drc2_LFA_cleanmod, files$drc2_MBA_cleanmod, 
-                  files$togoLFAf_41_cleanmod, files$togoLFAf_42_cleanmod, files$togoLFAg_41_cleanmod, 
-                  files$togoLFAg_42_cleanmod, files$togoLFAl_41_cleanmod, files$togoLFAl_42_cleanmod, 
-                  files$togoMBAc_41_cleanmod, files$togoMBAc_42_cleanmod, files$togoMBAp_41_cleanmod, 
-                  files$togoMBAp_42_cleanmod)
+filelist <- list(files$drc1_Ct694_cleanmod , files$drc1_LFA_cleanmod,
+                 files$drc1_MBA_cleanmod, files$drc2_Ct694_cleanmod, 
+                 files$drc2_LFA_cleanmod, files$drc2_MBA_cleanmod, 
+                 files$togoLFAf_41_cleanmod, files$togoLFAf_42_cleanmod, 
+                 files$togoLFAg_41_cleanmod, files$togoLFAg_42_cleanmod, 
+                 files$togoLFAl_41_cleanmod, files$togoLFAl_42_cleanmod,
+                 files$togoMBAc_41_cleanmod, files$togoMBAc_42_cleanmod, 
+                 files$togoMBAp_41_cleanmod, files$togoMBAp_42_cleanmod)
 
 stopifnot(length(filelist) == 16)
 
@@ -94,12 +94,12 @@ dfs <- lapply(filelist, function(x) {
 # add names for each df in the list corresponding to appropriate names for each
 # spreadheet, in this case country, number/unit, and associated assay information
 
-df_names <- c(drc1_Ct694 , drc1_LFA, drc1_MBA, 
-              drc2_Ct694, drc2_LFA, drc2_MBA, 
-              togoLFAf_41, togoLFAf_42, togoLFAg_41, 
-              togoLFAg_42, togoLFAl_41, togoLFAl_42, 
-              togoMBAc_41, togoMBAc_42, togoMBAp_41, 
-              togoMBAp_42)
+df_names <- c("drc1_Ct694" , "drc1_LFA", "drc1_MBA", 
+              "drc2_Ct694", "drc2_LFA", "drc2_MBA", 
+             "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
+              "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", 
+              "togoMBAc_41", "togoMBAc_42", "togoMBAp_41", 
+              "togoMBAp_42")
 
 names(dfs) <- df_names
 
@@ -116,7 +116,9 @@ for (i in seq_along(dfs)) {
   for (k in seq_along(dfs)){
     df <- purrr::pluck(dfs, k)
   }
-  
+
+start_time <- Sys.time()
+print(paste0("The modelling has begun..."))
 
 model_M1 = function(a, par_M1)
 {
@@ -280,8 +282,8 @@ for(k in 1:N_sam)
   M1_predict[k,] = sapply(age_seq, model_M1, par=MCMC_burn[sam_seq[k],1:N_par])
 }
 
-
 M1_quant = matrix(NA, nrow=3, ncol=length(age_seq))
+
 for(j in 1:length(age_seq))
 {
   M1_quant[,j] = quantile(M1_predict[,j], prob=c(0.025, 0.5, 0.975),seed = seed)
@@ -290,7 +292,7 @@ for(j in 1:length(age_seq))
 quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
 
 ###################################################
-# join all of the estimated params and export to plot task
+# join all of the model estimates (med, lcl, ucl) and save as dataframe (df)
 
 M1_quant_df <- as.data.frame(t(M1_quant)) %>%
   transmute(medest = as.numeric(V2), 
@@ -312,11 +314,18 @@ model_ests_df <- as.data.frame(left_join(M1_df,
 # iterates over each df, names it appropriately, and exports it to the plot task
 
 write_excel_csv(model_ests_df, quote = FALSE, 
-                path = files$plotdata)
+                path = here(paste("plot/input/",names(dfs)[i], 
+                                  "_model_ests_df.csv")))
 cat("*")
 }
 
+  print(paste0("The model is running..."))
+  
 }
 
+end_time <- Sys.time()
+print(paste0("Modelling complete at ", end_time))
+total_time <- end_time - start_time
+print(paste0("Running all models took ", total_time, " minutes to run to completion"))
 
 # done 
