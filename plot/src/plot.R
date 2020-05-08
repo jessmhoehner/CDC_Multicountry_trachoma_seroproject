@@ -33,7 +33,43 @@ files <- list(
   drc1_ct694_modelests = 
     here("/plot/input/DRC1Ct694_modelests.csv"),
   
-  drc1_ct694agespbins_plot1 = here("/plot/output/DRC1Ct694_ageseroprev.png"))
+  drc1_ct694_obs_plot = here("/plot/input/DRC1Ct694_obs_plot_df.csv"),
+  drc1_LFA_obs_plot = here("/plot/input/DRC1LFA_obs_plot_df.csv"),
+  drc1_MBA_obs_plot = here("/plot/input/DRC1MBA_obs_plot_df.csv"),
+  drc2_ct694_obs_plot = here("/plot/input/DRC2Ct694_obs_plot_df.csv"),
+  drc2_LFA_obs_plot = here("/plot/input/DRC2Ct694_obs_plot_df.csv"),
+  drc2_MBA_obs_plot = here("/plot/input/DRC2MBA_obs_plot_df.csv"),
+  togoLFAf_41_obs_plot = here("/plot/input/togoLFAf_40001_obs_plot_df.csv"),
+  togoLFAf_42_obs_plot = here("/plot/input/togoLFAf_40002_obs_plot_df.csv"),
+  togoLFAg_41_obs_plot = here("/plot/input/togoLFAgold_40001_obs_plot_df.csv"),
+  togoLFAg_42_obs_plot = here("/plot/input/togoLFAgold_40002_obs_plot_df.csv"),
+  togoLFAl_41_obs_plot = here("/plot/input/togoLFAlatex_40001_obs_plot_df.csv"),
+  togoLFAl_42_obs_plot = here("/plot/input/togoLFAlatex_40002_obs_plot_df.csv"),
+  togoMBAc_41_obs_plot = here("/plot/input/togoMBACt694_40001_obs_plot_df.csv"),
+  togoMBAc_42_obs_plot = here("/plot/input/togoMBACt694_40004_obs_plot_df.csv"),
+  togoMBAp_41_obs_plot = here("/plot/input/togoMBAPgp3_40001_obs_plot_df.csv"),
+  togoMBAp_41_obs_plot = here("/plot/input/togoMBAPgp3_40002_obs_plot_df.csv"),
+  
+  drc1_ct694_modelests = here("plot/input/drc1_Ct694_model_ests_df.csv"), 
+  drc1_LFA_modelests = here("plot/input/drc1_LFA_model_ests_df.csv"),
+  drc1_MBA_modelests = here("plot/input/drc1_MBA_model_ests_df.csv"),
+  drc2_ct694_modelests = here("plot/input/drc2_Ct694_model_ests_df.csv"), 
+  drc2_LFA_modelests = here("plot/input/drc2_LFA_model_ests_df.csv"),
+  drc2_MBA_modelests = here("plot/input/drc2_MBA_model_ests_df.csv"),
+  togoLFAf_41_modelests = here("/plot/input/togoLFAf_40001_model_ests_df.csv"),
+  togoLFAf_42_modelests = here("/plot/input/togoLFAf_40002_model_ests_df.csv"),
+  togoLFAg_41_modelests = here("/plot/input/togoLFAgold_40001_model_ests_df.csv"),
+  togoLFAg_42_modelests = here("/plot/input/togoLFAgold_40002_model_ests_df.csv"),
+  togoLFAl_41_modelests = here("/plot/input/togoLFAlatex_40001_model_ests_df.csv"),
+  togoLFAl_42_modelests = here("/plot/input/togoLFAlatex_40002_model_ests_df.csv"),
+  togoMBAc_41_modelests = here("/plot/input/togoMBACt694_40001_model_ests_df.csv"),
+  togoMBAc_42_modelests = here("/plot/input/togoMBACt694_40004_model_ests_df.csv"),
+  togoMBAp_41_modelests = here("/plot/input/togoMBAPgp3_40001_model_ests_df.csv"),
+  togoMBAp_41_modelests = here("/plot/input/togoMBAPgp3_40002_model_ests_df.csv"),
+  
+  
+  
+  drc1_ct694plot= here("/plot/output/DRC1Ct694_ageseroprev.png"))
 
 stopifnot(is_empty(files) != TRUE & length(files) == 3)
 
@@ -80,7 +116,8 @@ model_plot_df <- full_join(drc1_ct694_plot1_df , drc1_ct694_ests_df,
                 alpha = 0.2) + 
     theme_classic() +
     labs(title = "Proportion of Antibody Positivity Across Age Groups", 
-         subtitle = "Manono, DRC (Ct694) with 95% Confidence Interval Error Bars") +
+         subtitle = "Manono, DRC (Ct694) with 95% Confidence Interval Error 
+         Bars") +
     xlab("Age") +
     ylab("Proportion seropositive") + 
     ylim(0, 1.0) +
