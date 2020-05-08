@@ -12,6 +12,11 @@ Project structure
       - input
       - output
       - src
+  2. observed
+      - Makefile
+      - input
+      - output
+      - src
   2. model
       - Makefile
       - input
