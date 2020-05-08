@@ -35,7 +35,7 @@ pacman::p_load("here", "MASS", "compiler",
                "binom", "coda", "readr", 
                "janitor", "purrr", "tidyverse", "assertr")
 
-# specify inputs and outputs
+# creates a list of all filepaths to data to be read into the script
 files <- list(
   drc1_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
   drc1_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
@@ -56,28 +56,10 @@ files <- list(
 
   )
 
-stopifnot(is_empty(files) != TRUE & length(files) == 32)
-
-# set random seed
-set.seed(22315)            
-seed = 22315
-## Read in data
-
-## creates a list of all files
-filelist <- list(files$drc1_Ct694_cleanmod , files$drc1_LFA_cleanmod,
-                 files$drc1_MBA_cleanmod, files$drc2_Ct694_cleanmod, 
-                 files$drc2_LFA_cleanmod, files$drc2_MBA_cleanmod, 
-                 files$togoLFAf_41_cleanmod, files$togoLFAf_42_cleanmod, 
-                 files$togoLFAg_41_cleanmod, files$togoLFAg_42_cleanmod, 
-                 files$togoLFAl_41_cleanmod, files$togoLFAl_42_cleanmod,
-                 files$togoMBAc_41_cleanmod, files$togoMBAc_42_cleanmod, 
-                 files$togoMBAp_41_cleanmod, files$togoMBAp_42_cleanmod)
-
 stopifnot(length(filelist) == 16)
 
-#testlist <- list(files$drc1_Ct694_cleanmod, files$drc1_LFA_cleanmod)
-
-dfs <- lapply(filelist, function(x) {
+# creates a list called dfs, containing all 16 dataframes created from csvs
+dfs <- lapply(files, function(x) {
   
   x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
   clean_names()
@@ -100,20 +82,26 @@ df_names <- c("drc1_Ct694" , "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA",
 
 names(dfs) <- df_names
 
-## using the list of dataframes called dfs, we extract each df,
-## run it through the model, and save and export result to the plot task ##
+## using dfs, we extract each df,run it through the model, 
+## and save and export result to the plot task ##
 
 ## 1.1 MODEL  
 for (i in seq_along(dfs)) {
+  
+  # set seed for reproducibility of results
+  set.seed(22315)            
+  seed = 22315
   
 { df <- data.frame()
   for (k in seq_along(dfs)){
     df <- purrr::pluck(dfs, k)
   }
 
+#messages for the user to keep them aware of model progress
 start_time <- Sys.time()
 print(paste0("Modelling for dataset ",names(dfs)[i]," has now begun..."))
 
+#define the model_M1 function 
 model_M1 = function(a, par_M1)
 {
   lambda_0 <- par_M1[1]
@@ -130,7 +118,8 @@ model_M1 <- cmpfun(model_M1, options=list(optimize=3))
 ## 1.2 LIKELIHOOD
 ## changed where the model refers to column number to specific column name
 
-#DRC-ct694
+#define the loglike_M1 function 
+
 loglike_M1 <- function(par_M1)
 {
   SP_model <- sapply(df[,1], model_M1, par_M1=par_M1)
@@ -177,6 +166,8 @@ prior_M1 <- function(par)
   
   prior
 }
+
+#define the prior_M1 function 
 
 prior_M1 <- cmpfun(prior_M1, options=list(optimize=3))
 
@@ -306,8 +297,8 @@ model_ests_df <- as.data.frame(left_join(M1_df,
                            by = "rownum")) %>%
   filter(age_seq <= 9.0)
 
-# iterates over each df containing model estimates, 
-# names it appropriately, and exports it to the plot task
+# iterate over each df containing model estimates, 
+# name it appropriately, and export it to the plot task 
 
 write_excel_csv(model_ests_df, quote = FALSE, 
                 path = here(paste("plot/input/",names(dfs)[i], 
@@ -315,12 +306,13 @@ write_excel_csv(model_ests_df, quote = FALSE,
 cat("*")
 }
 
-  print(paste0("Modelling for dataset ",names(dfs)[i]," is now complete..."))
+#message to let the user know that each iteration has completed
+print(paste0("Modelling for dataset ",names(dfs)[i]," has completed successfully."))
   
 }
-
+# mark the end of all modeling, let the user know how long it took overall
 end_time <- Sys.time()
-print(paste0("Modelling complete at ", end_time))
+print(paste0("All modelling complete at ", end_time))
 total_time <- end_time - start_time
 print(paste0("Running all models took ", 
              round(total_time, 2) , " minutes to run to completion"))
