@@ -35,7 +35,6 @@ pacman::p_load("here", "MASS", "compiler",
                "binom", "coda", "readr", 
                "janitor", "purrr", "tidyverse", "assertr")
 
-
 # specify inputs and outputs
 files <- list(
   drc1_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
@@ -92,24 +91,19 @@ dfs <- lapply(filelist, function(x) {
 })
 
 # add names for each df in the list corresponding to appropriate names for each
-# spreadheet, in this case country, number/unit, and associated assay information
+# spreadheet, in this case country and associated unit and assay information
 
-df_names <- c("drc1_Ct694" , "drc1_LFA", "drc1_MBA", 
-              "drc2_Ct694", "drc2_LFA", "drc2_MBA", 
-             "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
-              "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", 
-              "togoMBAc_41", "togoMBAc_42", "togoMBAp_41", 
-              "togoMBAp_42")
+df_names <- c("drc1_Ct694" , "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
+              "drc2_MBA", "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
+              "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", "togoMBAc_41", 
+              "togoMBAc_42", "togoMBAp_41", "togoMBAp_42")
 
 names(dfs) <- df_names
 
-## have a list of dataframes, want to extract each df
-## run it through the model
-## save and export result ##
+## using the list of dataframes called dfs, we extract each df,
+## run it through the model, and save and export result to the plot task ##
 
 ## 1.1 MODEL  
-
-
 for (i in seq_along(dfs)) {
   
 { df <- data.frame()
@@ -118,7 +112,7 @@ for (i in seq_along(dfs)) {
   }
 
 start_time <- Sys.time()
-print(paste0("The modelling has begun..."))
+print(paste0("Modelling for dataset ",names(dfs)[i]," has now begun..."))
 
 model_M1 = function(a, par_M1)
 {
@@ -292,7 +286,7 @@ for(j in 1:length(age_seq))
 quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
 
 ###################################################
-# join all of the model estimates (med, lcl, ucl) and save as dataframe (df)
+# join the model estimates (med, lcl, ucl) and save as new dataframe
 
 M1_quant_df <- as.data.frame(t(M1_quant)) %>%
   transmute(medest = as.numeric(V2), 
@@ -306,12 +300,14 @@ age_seq_df <- as.data.frame(age_seq)
 age_seq_df  <- age_seq_df %>%
   mutate(rownum = as.numeric(rownames(M1_quant_df)))
 
+# export data just for the 1-9 year olds
 model_ests_df <- as.data.frame(left_join(M1_df,
                            age_seq_df, 
                            by = "rownum")) %>%
   filter(age_seq <= 9.0)
 
-# iterates over each df, names it appropriately, and exports it to the plot task
+# iterates over each df containing model estimates, 
+# names it appropriately, and exports it to the plot task
 
 write_excel_csv(model_ests_df, quote = FALSE, 
                 path = here(paste("plot/input/",names(dfs)[i], 
@@ -319,13 +315,14 @@ write_excel_csv(model_ests_df, quote = FALSE,
 cat("*")
 }
 
-  print(paste0("The model is running..."))
+  print(paste0("Modelling for dataset ",names(dfs)[i]," is now complete..."))
   
 }
 
 end_time <- Sys.time()
 print(paste0("Modelling complete at ", end_time))
 total_time <- end_time - start_time
-print(paste0("Running all models took ", total_time, " minutes to run to completion"))
+print(paste0("Running all models took ", 
+             round(total_time, 2) , " minutes to run to completion"))
 
 # done 
