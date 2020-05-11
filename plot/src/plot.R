@@ -183,7 +183,7 @@ suppressWarnings(
       labs(title = "Proportion of Antibody Positivity Across Age Groups", 
            subtitle = 
              paste("plot of ",names(obsdfs)[j],
-                   "with 95% Confidence Interval Error Bars", sep = "")) +
+                   " with 95% Confidence Interval Error Bars", sep = "")) +
       xlab("Age") +
       ylab("Proportion seropositive") + 
       ylim(0, 1.0) +
