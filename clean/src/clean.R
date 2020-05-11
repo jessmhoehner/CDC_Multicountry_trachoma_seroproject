@@ -36,22 +36,22 @@ pacman::p_load("here","readr", "janitor", "tidyverse",
 # specify file structure of inputs and outputs
 
 files <- list(
-  drc1_Ct694 = here("/clean/input/DRC1Ct694.csv"), 
-  drc1_LFA = here("/clean/input/DRC1LFA.csv"),
-  drc1_MBA = here("/clean/input/DRC1MBA.csv"),
-  drc2_Ct694 = here("/clean/input/DRC1Ct694.csv"),
-  drc2_LFA = here("/clean/input/DRC1LFA.csv"),
-  drc2_MBA = here("/clean/input/DRC1MBA.csv"),
-  togoLFAf_41 = here("/clean/input/TogoLFAfield_40001.csv"), 
-  togoLFAf_42 = here("/clean/input/TogoLFAfield_40002.csv"),
-  togoLFAg_41 = here("/clean/input/TogoLFAgold_40001.csv"), 
-  togoLFAg_42 = here("/clean/input/TogoLFAgold_40002.csv"), 
-  togoLFAl_41 = here("/clean/input/TogoLFAlatex_40001.csv"), 
-  togoLFAl_42 = here("/clean/input/TogoLFAlatex_40002.csv"), 
-  togoMBAc_41 = here("/clean/input/TogoMBAct694_40001.csv"), 
-  togoMBAc_42 = here("/clean/input/TogoMBAct694_40002.csv"), 
-  togoMBAp_41 =  here("/clean/input/TogoMBAPgp3_40001.csv"), 
-  togoMBAp_42 = here("/clean/input/TogoMBAPgp3_40002.csv")
+  drc1_Ct694 = here("clean/input/DRC1Ct694.csv"), 
+  drc1_LFA = here("clean/input/DRC1LFA.csv"),
+  drc1_MBA = here("clean/input/DRC1MBA.csv"),
+  drc2_Ct694 = here("clean/input/DRC2Ct694.csv"),
+  drc2_LFA = here("clean/input/DRC2LFA.csv"),
+  drc2_MBA = here("clean/input/DRC2MBA.csv"),
+  togoLFAf_41 = here("clean/input/TogoLFAfield_40001.csv"), 
+  togoLFAf_42 = here("clean/input/TogoLFAfield_40002.csv"),
+  togoLFAg_41 = here("clean/input/TogoLFAgold_40001.csv"), 
+  togoLFAg_42 = here("clean/input/TogoLFAgold_40002.csv"), 
+  togoLFAl_41 = here("clean/input/TogoLFAlatex_40001.csv"), 
+  togoLFAl_42 = here("clean/input/TogoLFAlatex_40002.csv"), 
+  togoMBAc_41 = here("clean/input/TogoMBAct694_40001.csv"), 
+  togoMBAc_42 = here("clean/input/TogoMBAct694_40002.csv"), 
+  togoMBAp_41 =  here("clean/input/TogoMBAPgp3_40001.csv"), 
+  togoMBAp_42 = here("clean/input/TogoMBAPgp3_40002.csv")
 
 )
 
@@ -96,23 +96,20 @@ names(cleanlist) <- df_names
 ## to the model and the observed tasks respectively##
 
 #start i loop
-for (i in seq_along(cleanlist)) 
-  {
+for (i in seq_along(cleanlist)) {
   
-  # start df loop
-  { 
-    df <- data.frame()
-    for (k in seq_along(cleanlist)){
-      df <- pluck(cleanlist, k)
-    }
-    
-    write_excel_csv(df, quote = FALSE, 
-                    path = 
+  df <- as.data.frame(pluck(cleanlist, i))
+  
+  write_excel_csv(df, quote = FALSE, 
+                  path = 
                       here(paste("model/input/",names(cleanlist)[i],"_cleanmod_df.csv", sep = "")))
-    
-    write_excel_csv(df, quote = FALSE, 
+  
+  write_excel_csv(df, quote = FALSE, 
                     path = 
                       here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
-    } # close df loop
+  #message to let the user know that each iteration has completed
+  print(paste0("Modelling for dataset ",names(cleanlist)[i]," has completed successfully."))
+  
   } # close i loop
+
 # done
