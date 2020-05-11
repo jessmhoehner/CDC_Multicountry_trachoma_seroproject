@@ -52,8 +52,7 @@ files <- list(
   togoMBAc_41_cleanmod = here("/model/input/togoMBAc_41_cleanmod_df.csv"),
   togoMBAc_42_cleanmod = here("/model/input/togoMBAc_42_cleanmod_df.csv"),
   togoMBAp_41_cleanmod = here("/model/input/togoMBAp_41_cleanmod_df.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv")
-
+  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv"),
   )
 
 stopifnot(length(files) == 16)
