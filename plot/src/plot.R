@@ -130,6 +130,7 @@ moddfs <- lapply(modlist, function(x) {
 
 # add names for each df in the list corresponding to appropriate names for each
 # spreadheet, in this case country and associated unit and assay information
+# this is used for subtitles and unique file names
 
 df_names <- c("Manono CT694 MBA", "Manono LFA Latex", "Manono Pgp3 MBA", 
               "Nyemba CT694 MBA", "Nyemba LFA Latex", "Nyemba Pgp3 MBA", 
@@ -181,7 +182,7 @@ suppressWarnings(
       theme_classic() +
       labs(title = "Proportion of Antibody Positivity Across Age Groups", 
            subtitle = 
-             paste("plot of",names(obsdfs)[j],
+             paste("plot of ",names(obsdfs)[j],
                    "with 95% Confidence Interval Error Bars", sep = "")) +
       xlab("Age") +
       ylab("Proportion seropositive") + 
