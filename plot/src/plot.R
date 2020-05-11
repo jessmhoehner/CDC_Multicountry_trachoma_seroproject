@@ -29,229 +29,184 @@ pacman::p_load("here", "readr", "janitor",
 # change to the plot/input/ in final runs
 
 files <- list(
-  drc1_ct694_obs_plot = here("/plot/input/DRC1Ct694_obs_plot_df.csv"),
-  drc1_LFA_obs_plot = here("/plot/input/DRC1LFA_obs_plot_df.csv"),
-  drc1_MBA_obs_plot = here("/plot/input/DRC1MBA_obs_plot_df.csv"),
-  drc2_ct694_obs_plot = here("/plot/input/DRC2Ct694_obs_plot_df.csv"),
-  drc2_LFA_obs_plot = here("/plot/input/DRC2Ct694_obs_plot_df.csv"),
-  drc2_MBA_obs_plot = here("/plot/input/DRC2MBA_obs_plot_df.csv"),
-  togoLFAf_41_obs_plot = here("/plot/input/togoLFAf_40001_obs_plot_df.csv"),
-  togoLFAf_42_obs_plot = here("/plot/input/togoLFAf_40002_obs_plot_df.csv"),
-  togoLFAg_41_obs_plot = here("/plot/input/togoLFAgold_40001_obs_plot_df.csv"),
-  togoLFAg_42_obs_plot = here("/plot/input/togoLFAgold_40002_obs_plot_df.csv"),
-  togoLFAl_41_obs_plot = here("/plot/input/togoLFAlatex_40001_obs_plot_df.csv"),
-  togoLFAl_42_obs_plot = here("/plot/input/togoLFAlatex_40002_obs_plot_df.csv"),
-  togoMBAc_41_obs_plot = here("/plot/input/togoMBACt694_40001_obs_plot_df.csv"),
-  togoMBAc_42_obs_plot = here("/plot/input/togoMBACt694_40004_obs_plot_df.csv"),
-  togoMBAp_41_obs_plot = here("/plot/input/togoMBAPgp3_40001_obs_plot_df.csv"),
-  togoMBAp_41_obs_plot = here("/plot/input/togoMBAPgp3_40002_obs_plot_df.csv"),
+  drc1_ct694_obs = here("/plot/input/drc1_Ct694_obs_df.csv"),
+  drc1_LFA_obs = here("/plot/input/drc1_LFA_obs_df.csv"),
+  drc1_MBA_obs = here("/plot/input/drc1_MBA_obs_df.csv"),
+  drc2_ct694_obs = here("/plot/input/drc2_Ct694_obs_df.csv"),
+  drc2_LFA_obs = here("/plot/input/drc2_LFA_obs_df.csv"),
+  drc2_MBA_obs = here("/plot/input/drc2_MBA_obs_df.csv"),
+  togoLFAf_41_obs = here("/plot/input/togoLFAf_41_obs_df.csv"),
+  togoLFAf_42_obs = here("/plot/input/togoLFAf_42_obs_df.csv"),
+  togoLFAg_41_obs = here("/plot/input/togoLFAg_41_obs_df.csv"),
+  togoLFAg_42_obs = here("/plot/input/togoLFAg_42_obs_df.csv"),
+  togoLFAl_41_obs = here("/plot/input/togoLFAl_41_obs_df.csv"),
+  togoLFAl_42_obs = here("/plot/input/togoLFAl_42_obs_df.csv"),
+  togoMBAc_41_obs = here("/plot/input/togoMBAc_41_obs_df.csv"),
+  togoMBAc_42_obs = here("/plot/input/togoMBAc_42_obs_df.csv"),
+  togoMBAp_41_obs = here("/plot/input/togoMBAp_41_obs_df.csv"),
+  togoMBAp_42_obs = here("/plot/input/togoMBAp_42_obs_df.csv"),
   
-  drc1_ct694_modelests = here("plot/input/drc1_Ct694_model_ests_df.csv"), 
-  drc1_LFA_modelests = here("plot/input/drc1_LFA_model_ests_df.csv"),
-  drc1_MBA_modelests = here("plot/input/drc1_MBA_model_ests_df.csv"),
-  drc2_ct694_modelests = here("plot/input/drc2_Ct694_model_ests_df.csv"), 
-  drc2_LFA_modelests = here("plot/input/drc2_LFA_model_ests_df.csv"),
-  drc2_MBA_modelests = here("plot/input/drc2_MBA_model_ests_df.csv"),
-  togoLFAf_41_modelests = here("/plot/input/togoLFAf_40001_model_ests_df.csv"),
-  togoLFAf_42_modelests = here("/plot/input/togoLFAf_40002_model_ests_df.csv"),
-  togoLFAg_41_modelests = here("/plot/input/togoLFAgold_40001_model_ests_df.csv"),
-  togoLFAg_42_modelests = here("/plot/input/togoLFAgold_40002_model_ests_df.csv"),
-  togoLFAl_41_modelests = here("/plot/input/togoLFAlatex_40001_model_ests_df.csv"),
-  togoLFAl_42_modelests = here("/plot/input/togoLFAlatex_40002_model_ests_df.csv"),
-  togoMBAc_41_modelests = here("/plot/input/togoMBACt694_40001_model_ests_df.csv"),
-  togoMBAc_42_modelests = here("/plot/input/togoMBACt694_40004_model_ests_df.csv"),
-  togoMBAp_41_modelests = here("/plot/input/togoMBAPgp3_40001_model_ests_df.csv"),
-  togoMBAp_41_modelests = here("/plot/input/togoMBAPgp3_40002_model_ests_df.csv"),
-  
-  drc1_ct694_plot = here("plot/input/drc1_Ct694_plot.png"), 
-  drc1_LFA_plot = here("plot/input/drc1_LFA_plot.png"),
-  drc1_MBA_plot = here("plot/input/drc1_MBA_plot.png"),
-  drc2_ct694_plot = here("plot/input/drc2_Ct694_plot.png"), 
-  drc2_LFA_plot = here("plot/input/drc2_LFA_plot.png"),
-  drc2_MBA_plot = here("plot/input/drc2_MBA_plot.png"),
-  togoLFAf_41_plot = here("/plot/input/togoLFAf_40001_plot.png"),
-  togoLFAf_42_plot = here("/plot/input/togoLFAf_40002_plot.png"),
-  togoLFAg_41_plot = here("/plot/input/togoLFAgold_40001_plot.png"),
-  togoLFAg_42_plot = here("/plot/input/togoLFAgold_40002_plot.png"),
-  togoLFAl_41_plot = here("/plot/input/togoLFAlatex_40001_plot.png"),
-  togoLFAl_42_plot = here("/plot/input/togoLFAlatex_40002_plot.png"),
-  togoMBAc_41_plot = here("/plot/input/togoMBACt694_40001_plot.png"),
-  togoMBAc_42_plot = here("/plot/input/togoMBACt694_40004_plot.png"),
-  togoMBAp_41_plot = here("/plot/input/togoMBAPgp3_40001_plot.png"),
-  togoMBAp_41_plot = here("/plot/input/togoMBAPgp3_40002_plot.png"),
-  fullfacetplot= here("/plot/output/fullfacteplot.png")
-  )
+  drc1_Ct694_mod = here("plot/input/drc1_Ct694_model_ests_df.csv"),
+  drc1_LFA_mod = here("plot/input/drc1_LFA_model_ests_df.csv"),
+  drc1_MBA_mod = here("plot/input/drc1_MBA_model_ests_df.csv"),
+  drc2_Ct694_mod = here("plot/input/drc2_Ct694_model_ests_df.csv"),
+  drc2_LFA_mod = here("plot/input/drc2_LFA_model_ests_df.csv"),
+  drc2_MBA_mod = here("plot/input/drc2_MBA_model_ests_df.csv"),
+  togoLFAf_41_mod = here("plot/input/togoLFAf_41_model_ests_df.csv"),
+  togoLFAf_42_mod = here("plot/input/togoLFAf_42_model_ests_df.csv"),
+  togoLFAg_41_mod = here("plot/input/togoLFAg_41_model_ests_df.csv"),
+  togoLFAg_42_mod = here("plot/input/togoLFAg_42_model_ests_df.csv"), 
+  togoLFAl_41_mod = here("plot/input/togoLFAl_41_model_ests_df.csv"), 
+  togoLFAl_42_mod = here("plot/input/togoLFAl_42_model_ests_df.csv"),
+  togoMBAc_41_mod = here("plot/input/togoMBAc_41_model_ests_df.csv"),
+  togoMBAc_42_mod = here("plot/input/togoMBAc_42_model_ests_df.csv"),
+  togoMBAp_41_mod = here("plot/input/togoMBAp_41_model_ests_df.csv"),
+  togoMBAp_42_mod = here("plot/input/togoMBAp_42_model_ests_df.csv")
 
-stopifnot(is_empty(files) != TRUE & length(files) == 49)
+)
+
+stopifnot(is_empty(files) != TRUE & length(files) == 32)
 
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
-### plot observed and estimated cases based on SCR model
+## creates a list of all files as connections
+obslist <- list(files$drc1_ct694_obs,files$drc1_LFA_obs,files$drc1_MBA_obs,
+                files$drc2_ct694_obs,files$drc2_LFA_obs,files$drc2_MBA_obs,
+                files$togoLFAf_41_obs,files$togoLFAf_42_obs, files$togoLFAg_41_obs,
+                files$togoLFAg_42_obs,files$togoLFAl_41_obs,files$togoLFAl_42_obs,
+                files$togoMBAc_41_obs,files$togoMBAc_42_obs,files$togoMBAp_41_obs,
+                files$togoMBAp_42_obs)
 
-# read in data as list and save as dfs, combine
+stopifnot(length(obslist) == 16)
+stopifnot(obslist %in% files == TRUE)
 
-# creates a list called dfs, containing all dataframes created from csvs
-# to be read in 
-inputs <- list(
-  drc1_ct694_obs_plot = here("plot/input/DRC1Ct694_obs_plot_df.csv"),
-  drc1_LFA_obs_plot = here("plot/input/DRC1LFA_obs_plot_df.csv"),
-  drc1_MBA_obs_plot = here("plot/input/DRC1MBA_obs_plot_df.csv"),
-  drc2_ct694_obs_plot = here("plot/input/DRC2Ct694_obs_plot_df.csv"),
-  drc2_LFA_obs_plot = here("plot/input/DRC2Ct694_obs_plot_df.csv"),
-  drc2_MBA_obs_plot = here("plot/input/DRC2MBA_obs_plot_df.csv"),
-  togoLFAf_41_obs_plot = here("plot/input/togoLFAf_40001_obs_plot_df.csv"),
-  togoLFAf_42_obs_plot = here("plot/input/togoLFAf_40002_obs_plot_df.csv"),
-  togoLFAg_41_obs_plot = here("plot/input/togoLFAgold_40001_obs_plot_df.csv"),
-  togoLFAg_42_obs_plot = here("plot/input/togoLFAgold_40002_obs_plot_df.csv"),
-  togoLFAl_41_obs_plot = here("plot/input/togoLFAlatex_40001_obs_plot_df.csv"),
-  togoLFAl_42_obs_plot = here("plot/input/togoLFAlatex_40002_obs_plot_df.csv"),
-  togoMBAc_41_obs_plot = here("plot/input/togoMBACt694_40001_obs_plot_df.csv"),
-  togoMBAc_42_obs_plot = here("plot/input/togoMBACt694_40002_obs_plot_df.csv"),
-  togoMBAp_41_obs_plot = here("plot/input/togoMBAPgp3_40001_obs_plot_df.csv"),
-  togoMBAp_42_obs_plot = here("plot/input/togoMBAPgp3_40002_obs_plot_df.csv"),
+# creates a list called obsdfs, containing all 16 dataframes created from obs data
+obsdfs <- lapply(obslist, function(x) {
   
-  drc1_ct694_modelests = here("plot/input/drc1_Ct694_model_ests_df.csv"), 
-  drc1_LFA_modelests = here("plot/input/drc1_LFA_model_ests_df.csv"),
-  drc1_MBA_modelests = here("plot/input/drc1_MBA_model_ests_df.csv"),
-  drc2_ct694_modelests = here("plot/input/drc2_Ct694_model_ests_df.csv"), 
-  drc2_LFA_modelests = here("plot/input/drc2_LFA_model_ests_df.csv"),
-  drc2_MBA_modelests = here("plot/input/drc2_MBA_model_ests_df.csv"),
-  
-  togoLFAf_41_modelests = here("plot/input/togoLFAf_41_model_ests_df.csv"),
-  togoLFAf_42_modelests = here("plot/input/togoLFAf_42_model_ests_df.csv"),
-  togoLFAg_41_modelests = here("plot/input/togoLFAg_41_model_ests_df"),
-  togoLFAg_42_modelests = here("plot/input/togoLFAg_42_model_ests_df"),
-  togoLFAl_41_modelests = here("plot/input/togoLFAl_41_model_ests_df"),
-  togoLFAl_42_modelests = here("plot/input/togoLFAl_42_model_ests_df"),
-  togoMBAc_41_modelests = here("plot/input/togoMBAc_41_model_ests_df"),
-  togoMBAc_42_modelests = here("plot/input/togoMBAc_42_model_ests_df"),
-  togoMBAp_41_modelests = here("plot/input/togoMBAp_41_model_ests_df"),
-  togoMBAp_42_modelests = here("plot/input/togoMBAp_42_model_ests_df")
-
-)
-stopifnot(is_empty(inputs) == FALSE & length(inputs) == 32)
-
-test <-list(inputs$drc1_ct694_obs_plot, inputs$drc1_ct694_modelests)
-
-dfs <- lapply(inputs, function(x) {
-  
-  df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
+  x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
     clean_names()
   
-}
-
-)
-
-dfs[[1:16]]
-
-
-# reads in the list of inputs which has two other lists, observedprevs and 
-# modelests, checks som expected parameters, and creates a list called dfs
-
-dfs <- lapply(inputs, function(x) {
-  
-  df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
-  clean_names()
-  
-  obs_df <- df[1:16,]
-  
-  ests_df <- df[17:32,]
-  
-  obs_df <- obs_df  %>%
-    verify(ncol(obs_df) == 5) %>%
-    verify(is.na(obs_df) == FALSE) %>%
+  x_df  %>%
+    verify(ncol(x_df) == 5 & nrow(x_df) == 9)  %>%
+    verify(is.na(x_df) == FALSE) %>%
     transmute(med = med, 
-              high95_obs = high_95,
-              low95_obs = low_95,
+              low_95 = low_95, 
+              high_95 = high_95, 
               age = age, 
               age_bins_mid = age_bins_mid)
   
-  ests_df <- ests_df  %>%
-    verify(ncol(ests_df) == 5) %>%
-    verify(is.na(ests_df) == FALSE) %>%
+  x_df <- x_df %>%
+    mutate(rownum = as.numeric(row.names(x_df)))
+  
+  })
+
+# creates a list called moddfs, containing all 16 dataframes created from modeled data
+modlist <- list(files$drc1_Ct694_mod,files$drc1_LFA_mod,files$drc1_MBA_mod,
+                files$drc2_Ct694_mod,files$drc2_LFA_mod,files$drc2_MBA_mod,
+                files$togoLFAf_41_mod,files$togoLFAf_42_mod, files$togoLFAg_41_mod,
+                files$togoLFAg_42_mod,files$togoLFAl_41_mod,files$togoLFAl_42_mod,
+                files$togoMBAc_41_mod,files$togoMBAc_42_mod,files$togoMBAp_41_mod,
+                files$togoMBAp_42_mod)
+
+stopifnot(length(modlist) == 16)
+stopifnot(modlist %in% files == TRUE)
+
+# creates a list called moddfs, containing all 16 dataframes created from mod data
+moddfs <- lapply(modlist, function(x) {
+  
+  x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
+    clean_names()
+  
+  x_df  %>%
+    verify(ncol(x_df) == 5 & nrow(x_df) ==46) %>%
+    verify(is.na(x_df) == FALSE) %>%
     transmute(medest = medest, 
-              high95_est = high95_est,
-              low95_est - low95_est,
-              rownum = rownum, 
-              age_seq = age_seq)
+              low95_est = low95_est, 
+              high95_est = high95_est, 
+              age_seq = age_seq, 
+              rownum = rownum)
+  
 })
 
 # add names for each df in the list corresponding to appropriate names for each
-# spreadheet, in this case country, associated unit and assay information, 
-# and whether they describe observed prevalence or model estimate data
+# spreadheet, in this case country and associated unit and assay information
 
-df_names <- c("drc1_Ct694_obs" , "drc1_LFA_obs", "drc1_MBA_obs", 
-"drc2_Ct694_obs", "drc2_LFA_obs", 
-              "drc2_MBA_obs", "togoLFAf_41_obs", "togoLFAf_42_obs", 
-			  "togoLFAg_41_obs", 
-              "togoLFAg_42_obs", "togoLFAl_41_obs", "togoLFAl_42_obs", 
-			  "togoMBAc_41_obs", 
-              "togoMBAc_42_obs", "togoMBAp_41_obs", "togoMBAp_42_obs",
-			  "drc1_Ct694_obs" , "drc1_LFA_obs", "drc1_MBA_obs", 
-"drc2_Ct694_modelests", "drc2_LFA_modelests", 
-              "drc2_MBA_modelests", "togoLFAf_41_modelests", 
-			  "togoLFAf_42_modelests", 
-			  "togoLFAg_41_modelests", 
-              "togoLFAg_42_modelests", "togoLFAl_41_modelests", 
-			  "togoLFAl_42_modelests", 
-			  "togoMBAc_41_modelests", 
-              "togoMBAc_42_modelests", "togoMBAp_41_modelests", "togoMBAp_42_modelests",
-			  
-			  )
-			 
-names(dfs) <- df_names
+df_names <- c("drc1_Ct694", "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
+          "drc2_MBA", "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
+          "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", "togoMBAc_41", 
+          "togoMBAc_42", "togoMBAp_41", "togoMBAp_42")
+
+names(obsdfs) <- df_names
+names(moddfs) <- df_names
+
+## using dfs, we extract each df and combine them as needed for each graph
+# initialize empty dfs
+df_obs <- data.frame(matrix(0, 9, 6))
+df_mod <- data.frame(matrix(0, 46, 5))
+plot_df <- data.frame(matrix(0, 46, 10))
+
+# make age seroprevalence graphs using the observed data and modeled fit estimates
+
+#start j loop
+suppressWarnings(
+  for (j in seq_along(obslist)){
+  
+  #messages for the user to keep them aware of model progress
+  print(paste0("Creating plotting dataset for ",names(obsdfs)[j]))
+    
+  df_obs <- as.data.frame(pluck(obsdfs, j))
+  df_mod <- as.data.frame(pluck(moddfs, j))
+  plot_df <- full_join(df_obs , df_mod, by = "rownum")
+  
+  #plot age sero prev curves, observed and estimated with error bars and 95%CI
+  age_seroprev_plot<- ggplot(plot_df, aes(age, med, age_bins_mid)) +
+      geom_pointrange(aes(ymin=low_95, 
+                          ymax=high_95)) +
+      geom_errorbar(aes(ymin=low_95,
+                        ymax=high_95), 
+                    colour="black", 
+                    width=.1, 
+                    position=pd) +
+      geom_line(aes(age_seq, medest), 
+                color = "blue", 
+                position=pd) +
+      geom_ribbon(aes(age_seq,
+                      ymin = low95_est, 
+                      ymax = high95_est), 
+                  fill = "blue", 
+                  position=pd, 
+                  alpha = 0.2) + 
+      theme_classic() +
+      labs(title = "Proportion of Antibody Positivity Across Age Groups", 
+           subtitle = 
+             paste("plot of",names(obsdfs)[j],
+                   "with 95% Confidence Interval Error Bars", sep = "")) +
+      xlab("Age") +
+      ylab("Proportion seropositive") + 
+      ylim(0, 1.0) +
+      scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)) +
+    theme(axis.title.x = element_text(size = 14),
+          axis.title.y = element_text(size = 14),
+          axis.text.x  = element_text(size=14),
+          axis.text.y  = element_text(size=14))
+  
+  ggsave(filename = here(paste("plot/output/",names(obsdfs)[j],
+                               "_ageseroprev.png", sep = "")), 
+         plot = last_plot(),
+         device = "png",
+         dpi = 600)
+  
+  
+  #message to let the user know that each iteration has completed
+  print(paste0("Plot created for ",names(obsdfs)[j]))
+  
+})
 
 
+# Suppressed warnings because 
+# "Removed 37 rows containing missing values (geom_pointrange)" is because
+# there are empty rows in the observed data where the modeled data uses 
+# the age_seq variable, I'm hoping to figure out a more elegant solution but this
+# plots the correct data for now
 
-# DRC1_Ct694 plot 1 
-# read in observed data
-drc1_ct694_plot1_df <- read_csv(files$drc1_ct694_observed, 
-                                col_names = TRUE, na = "NA") %>%
-  clean_names()
-
-#prepare for joining with ests
-drc1_ct694_plot1_df <- drc1_ct694_plot1_df %>%
-  mutate(rownum = as.numeric(row.names(drc1_ct694_plot1_df)))
-
-# read in model estimates
-drc1_ct694_ests_df <- read_csv(files$drc1_ct694_modelests, 
-                               col_names = TRUE, na = "NA") %>%
-  clean_names()
-
-# join observed and estimated cases
-model_plot_df <- full_join(drc1_ct694_plot1_df , drc1_ct694_ests_df, 
-                           by = "rownum")
-
-#plot age sero prev curves, observed and estimated with error bars and 95%CI
-(drc_1_ct694_1 <- ggplot(model_plot_df, aes(age, med, age_bins_mid)) +
-    geom_pointrange(aes(ymin=low_95, 
-                        ymax=high_95)) +
-    geom_errorbar(aes(ymin=low_95,
-                      ymax=high_95), 
-                  colour="black", 
-                  width=.1, 
-                  position=pd) +
-    geom_line(aes(age_seq, medest), 
-              color = "blue", 
-              position=pd) +
-    geom_ribbon(aes(age_seq,
-                    ymin = low95_est, 
-                    ymax = high95_est), 
-                fill = "blue", 
-                position=pd, 
-                alpha = 0.2) + 
-    theme_classic() +
-    labs(title = "Proportion of Antibody Positivity Across Age Groups", 
-         subtitle = "Manono, DRC (Ct694) with 95% Confidence Interval Error 
-         Bars") +
-    xlab("Age") +
-    ylab("Proportion seropositive") + 
-    ylim(0, 1.0) +
-    scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)))+
-  theme(axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14),
-        axis.text.x  = element_text(size=14),
-        axis.text.y  = element_text(size=14))
-
-ggsave(files$drc1_ct694agespbins_plot1, 
-       plot = last_plot(),dpi = 600,limitsize = TRUE)
+# done 
