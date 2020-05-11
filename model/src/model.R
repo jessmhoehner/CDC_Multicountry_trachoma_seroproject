@@ -291,7 +291,7 @@ loglike_M1 <- cmpfun(loglike_M1, options=list(optimize=3))
       M1_quant[,m] = quantile(M1_predict[,m], prob=c(0.025, 0.5, 0.975),seed = seed)
     } # end m loop
     
-  quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
+  quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975))
 
   ###################################################
   # join the model estimates (med, lcl, ucl) and save as new dataframe
