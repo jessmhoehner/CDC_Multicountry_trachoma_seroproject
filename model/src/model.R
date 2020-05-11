@@ -58,8 +58,18 @@ files <- list(
 
 stopifnot(length(filelist) == 16)
 
+## creates a list of all files as connections
+fileslist <- list(files$drc1_Ct694_cleanmod , files$drc1_LFA_cleanmod, files$drc1_MBA_cleanmod, 
+                  files$drc2_Ct694_cleanmod, files$drc2_LFA_cleanmod, files$drc2_MBA_cleanmod, 
+                  files$togoLFAf_41_cleanmod, files$togoLFAf_42_cleanmod, files$togoLFAg_41_cleanmod, 
+                  files$togoLFAg_42_cleanmod, files$togoLFAl_41_cleanmod, files$togoLFAl_42_cleanmod, 
+                  files$togoMBAc_41_cleanmod, files$togoMBAc_42_cleanmod, files$togoMBAp_41_cleanmod, 
+                  files$togoMBAp_42_cleanmod)
+
+stopifnot(length(fileslist) == 16)
+
 # creates a list called dfs, containing all 16 dataframes created from csvs
-dfs <- lapply(files, function(x) {
+dfs <- lapply(fileslist, function(x) {
   
   x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
   clean_names()
@@ -92,7 +102,8 @@ for (i in seq_along(dfs)) {
   set.seed(22315)            
   seed = 22315
   
-{ df <- data.frame()
+  { 
+  df <- data.frame()
   for (k in seq_along(dfs)){
     df <- pluck(dfs, k)
   }
@@ -262,16 +273,16 @@ sam_seq = round(seq(from=1, to=nrow(MCMC_burn), length=N_sam))
 
 
 M1_predict = matrix(NA, nrow=N_sam, ncol=length(age_seq))
-for(k in 1:N_sam)
+for(l in 1:N_sam)
 {
-  M1_predict[k,] = sapply(age_seq, model_M1, par=MCMC_burn[sam_seq[k],1:N_par])
+  M1_predict[l,] = sapply(age_seq, model_M1, par=MCMC_burn[sam_seq[l],1:N_par])
 }
 
 M1_quant = matrix(NA, nrow=3, ncol=length(age_seq))
 
-for(j in 1:length(age_seq))
+for(m in 1:length(age_seq))
 {
-  M1_quant[,j] = quantile(M1_predict[,j], prob=c(0.025, 0.5, 0.975),seed = seed)
+  M1_quant[,m] = quantile(M1_predict[,m], prob=c(0.025, 0.5, 0.975),seed = seed)
 }
 
 quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975) )
@@ -302,7 +313,7 @@ model_ests_df <- as.data.frame(left_join(M1_df,
 
 write_excel_csv(model_ests_df, quote = FALSE, 
                 path = 
-                  here(paste("plot/input/",names(dfs)[i],"_model_ests_df.csv")))
+                  here(paste("plot/input/",names(dfs)[i],"_model_ests_df.csv", sep = "")))
 cat("*")
 }
 
@@ -310,6 +321,7 @@ cat("*")
 print(paste0("Modelling for dataset ",names(dfs)[i]," has completed successfully."))
   
 }
+
 # mark the end of all modeling, let the user know how long it took overall
 end_time <- Sys.time()
 print(paste0("All modelling complete at ", end_time))

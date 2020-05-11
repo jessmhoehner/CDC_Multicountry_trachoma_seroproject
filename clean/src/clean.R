@@ -50,8 +50,8 @@ files <- list(
   togoLFAl_42 = here("/clean/input/TogoLFAlatex_40002.csv"), 
   togoMBAc_41 = here("/clean/input/TogoMBAct694_40001.csv"), 
   togoMBAc_42 = here("/clean/input/TogoMBAct694_40002.csv"), 
-  togoMBAp_41 =  here("/clean/input/TogoMBAct694_40001.csv"), 
-  togoMBAp_42 = here("/clean/input/TogoMBAct694_40002.csv")
+  togoMBAp_41 =  here("/clean/input/TogoMBAPgp3_40001.csv"), 
+  togoMBAp_42 = here("/clean/input/TogoMBAPgp3_40002.csv")
 
 )
 
@@ -108,11 +108,11 @@ for (i in seq_along(cleanlist))
     
     write_excel_csv(df, quote = FALSE, 
                     path = 
-                      here(paste("model/input/",names(cleanlist)[i],"_cleanmod_df.csv")))
+                      here(paste("model/input/",names(cleanlist)[i],"_cleanmod_df.csv", sep = "")))
     
     write_excel_csv(df, quote = FALSE, 
                     path = 
-                      here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv")))
+                      here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
     } # close df loop
   } # close i loop
 # done
