@@ -29,10 +29,10 @@ pacman::p_load("here", "readr", "janitor",
 # change to the plot/input/ in final runs
 
 files <- list(
-  drc1_ct694_obs = here("/plot/input/drc1_Ct694_obs_df.csv"),
+  drc1_CT694_obs = here("/plot/input/drc1_Ct694_obs_df.csv"),
   drc1_LFA_obs = here("/plot/input/drc1_LFA_obs_df.csv"),
   drc1_MBA_obs = here("/plot/input/drc1_MBA_obs_df.csv"),
-  drc2_ct694_obs = here("/plot/input/drc2_Ct694_obs_df.csv"),
+  drc2_CT694_obs = here("/plot/input/drc2_Ct694_obs_df.csv"),
   drc2_LFA_obs = here("/plot/input/drc2_LFA_obs_df.csv"),
   drc2_MBA_obs = here("/plot/input/drc2_MBA_obs_df.csv"),
   togoLFAf_41_obs = here("/plot/input/togoLFAf_41_obs_df.csv"),
@@ -46,10 +46,10 @@ files <- list(
   togoMBAp_41_obs = here("/plot/input/togoMBAp_41_obs_df.csv"),
   togoMBAp_42_obs = here("/plot/input/togoMBAp_42_obs_df.csv"),
   
-  drc1_Ct694_mod = here("plot/input/drc1_Ct694_model_ests_df.csv"),
+  drc1_CT694_mod = here("plot/input/drc1_Ct694_model_ests_df.csv"),
   drc1_LFA_mod = here("plot/input/drc1_LFA_model_ests_df.csv"),
   drc1_MBA_mod = here("plot/input/drc1_MBA_model_ests_df.csv"),
-  drc2_Ct694_mod = here("plot/input/drc2_Ct694_model_ests_df.csv"),
+  drc2_CT694_mod = here("plot/input/drc2_Ct694_model_ests_df.csv"),
   drc2_LFA_mod = here("plot/input/drc2_LFA_model_ests_df.csv"),
   drc2_MBA_mod = here("plot/input/drc2_MBA_model_ests_df.csv"),
   togoLFAf_41_mod = here("plot/input/togoLFAf_41_model_ests_df.csv"),
@@ -70,8 +70,8 @@ stopifnot(is_empty(files) != TRUE & length(files) == 32)
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
 ## creates a list of all files as connections
-obslist <- list(files$drc1_ct694_obs,files$drc1_LFA_obs,files$drc1_MBA_obs,
-                files$drc2_ct694_obs,files$drc2_LFA_obs,files$drc2_MBA_obs,
+obslist <- list(files$drc1_CT694_obs,files$drc1_LFA_obs,files$drc1_MBA_obs,
+                files$drc2_CT694_obs,files$drc2_LFA_obs,files$drc2_MBA_obs,
                 files$togoLFAf_41_obs,files$togoLFAf_42_obs, files$togoLFAg_41_obs,
                 files$togoLFAg_42_obs,files$togoLFAl_41_obs,files$togoLFAl_42_obs,
                 files$togoMBAc_41_obs,files$togoMBAc_42_obs,files$togoMBAp_41_obs,
@@ -101,8 +101,8 @@ obsdfs <- lapply(obslist, function(x) {
   })
 
 # creates a list called moddfs, containing all 16 dataframes created from modeled data
-modlist <- list(files$drc1_Ct694_mod,files$drc1_LFA_mod,files$drc1_MBA_mod,
-                files$drc2_Ct694_mod,files$drc2_LFA_mod,files$drc2_MBA_mod,
+modlist <- list(files$drc1_CT694_mod,files$drc1_LFA_mod,files$drc1_MBA_mod,
+                files$drc2_CT694_mod,files$drc2_LFA_mod,files$drc2_MBA_mod,
                 files$togoLFAf_41_mod,files$togoLFAf_42_mod, files$togoLFAg_41_mod,
                 files$togoLFAg_42_mod,files$togoLFAl_41_mod,files$togoLFAl_42_mod,
                 files$togoMBAc_41_mod,files$togoMBAc_42_mod,files$togoMBAp_41_mod,
@@ -131,10 +131,12 @@ moddfs <- lapply(modlist, function(x) {
 # add names for each df in the list corresponding to appropriate names for each
 # spreadheet, in this case country and associated unit and assay information
 
-df_names <- c("drc1_Ct694", "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
-          "drc2_MBA", "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
-          "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", "togoMBAc_41", 
-          "togoMBAc_42", "togoMBAp_41", "togoMBAp_42")
+df_names <- c("Manono CT694 MBA", "Manono LFA Latex", "Manono Pgp3 MBA", 
+              "Nyemba CT694 MBA", "Nyemba LFA Latex", "Nyemba Pgp3 MBA", 
+              "Keran LFA (Field)", "Anie LFA (Field)", "Keran LFA (Gold)", 
+          "Anie LFA (Gold)", "Keran LFA (Latex)", "Anie LFA (Latex)", 
+          "Keran CT694 MBA", "Anie CT694 MBA", "Keran Pgp3 MBA", 
+          "Anie Pgp3 MBA")
 
 names(obsdfs) <- df_names
 names(moddfs) <- df_names
@@ -159,7 +161,7 @@ suppressWarnings(
   plot_df <- full_join(df_obs , df_mod, by = "rownum")
   
   #plot age sero prev curves, observed and estimated with error bars and 95%CI
-  age_seroprev_plot<- ggplot(plot_df, aes(age, med, age_bins_mid)) +
+  age_seroprev_plot<-ggplot(plot_df, aes(age, med, age_bins_mid)) +
       geom_pointrange(aes(ymin=low_95, 
                           ymax=high_95)) +
       geom_errorbar(aes(ymin=low_95,
@@ -190,17 +192,19 @@ suppressWarnings(
           axis.text.x  = element_text(size=14),
           axis.text.y  = element_text(size=14))
   
+  # save each graph individually
   ggsave(filename = here(paste("plot/output/",names(obsdfs)[j],
                                "_ageseroprev.png", sep = "")), 
          plot = last_plot(),
          device = "png",
          dpi = 600)
   
-  
   #message to let the user know that each iteration has completed
   print(paste0("Plot created for ",names(obsdfs)[j]))
   
-})
+}
+
+)
 
 
 # Suppressed warnings because 
