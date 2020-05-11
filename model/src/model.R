@@ -37,22 +37,22 @@ pacman::p_load("here", "MASS", "compiler",
 
 # creates a list of all filepaths to data to be read into the script
 files <- list(
-  drc1_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
-  drc1_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
-  drc1_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
-  drc2_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
-  drc2_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
-  drc2_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
-  togoLFAf_41_cleanmod = here("/model/input/TogoLFAfield_40001_cleanmod.csv"),
-  togoLFAf_42_cleanmod = here("/model/input/TogoLFAfield_40002_cleanmod.csv"),
-  togoLFAg_41_cleanmod = here("/model/input/TogoLFAgold_40001_cleanmod.csv"),
-  togoLFAg_42_cleanmod = here("/model/input/TogoLFAgold_40002_cleanmod.csv"), 
-  togoLFAl_41_cleanmod = here("/model/input/TogoLFAlatex_40001_cleanmod.csv"), 
-  togoLFAl_42_cleanmod = here("/model/input/TogoLFAlatex_40002_cleanmod.csv"),
-  togoMBAc_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
-  togoMBAc_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
-  togoMBAp_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv")
+  drc1_Ct694_cleanmod = here("/model/input/drc1_Ct694_cleanmod_df.csv"),
+  drc1_LFA_cleanmod = here("/model/input/drc1_LFA_cleanmod_df.csv"),
+  drc1_MBA_cleanmod = here("/model/input/drc1_MBA_cleanmod_df.csv"),
+  drc2_Ct694_cleanmod = here("/model/input/drc2_Ct694_cleanmod_df.csv"),
+  drc2_LFA_cleanmod = here("/model/input/drc2_LFA_cleanmod_df.csv"),
+  drc2_MBA_cleanmod = here("/model/input/drc2_MBA_cleanmod_df.csv"),
+  togoLFAf_41_cleanmod = here("/model/input/togoLFAf_41_cleanmod_df.csv"),
+  togoLFAf_42_cleanmod = here("/model/input/togoLFAf_42_cleanmod_df.csv"),
+  togoLFAg_41_cleanmod = here("/model/input/togoLFAg_41_cleanmod_df.csv"),
+  togoLFAg_42_cleanmod = here("/model/input/togoLFAg_42_cleanmod_df.csv"), 
+  togoLFAl_41_cleanmod = here("/model/input/togoLFAl_41_cleanmod_df.csv"), 
+  togoLFAl_42_cleanmod = here("/model/input/togoLFAl_42_cleanmod_df.csv"),
+  togoMBAc_41_cleanmod = here("/model/input/togoMBAc_41_cleanmod_df.csv"),
+  togoMBAc_42_cleanmod = here("/model/input/togoMBAc_42_cleanmod_df.csv"),
+  togoMBAp_41_cleanmod = here("/model/input/togoMBAp_41_cleanmod_df.csv"),
+  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv")
 
   )
 
