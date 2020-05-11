@@ -21,8 +21,7 @@
 
 ## this script reads in individual .csvs with age, titre, and sero_pos columns
 ## after reading in it make sure none of the sheets are empty, they each have
-## 3 columns and however many columns they are expected to have (tested with 
-## unit tests), and they are exported to the model task input folder
+## 3 columns 
 
 ## next, the cleaned dataframes in each sheet are used to calculate prevalence
 ## proportions for each age group and 95% binomial confidence estimates
@@ -52,51 +51,14 @@ files <- list(
   togoMBAc_41 = here("/clean/input/TogoMBAct694_40001.csv"), 
   togoMBAc_42 = here("/clean/input/TogoMBAct694_40002.csv"), 
   togoMBAp_41 =  here("/clean/input/TogoMBAct694_40001.csv"), 
-  togoMBAp_42 = here("/clean/input/TogoMBAct694_40002.csv"),
-  
-  drc1_Ct694_clean = here("/observed/input/DRC1Ct694_clean.csv"),
-  drc1_LFA_clean = here("/observed/input/DRC1LFA_clean.csv"),
-  drc1_MBA_clean = here("/observed/input/DRC1MBA_clean.csv"),
-  drc2_Ct694_clean = here("/observed/input/DRC2Ct694_clean.csv"),
-  drc2_LFA_clean = here("/observed/input/DRC2LFA_clean.csv"),
-  drc2_MBA_clean = here("/observed/input/DRC2MBA_clean.csv"),
-  togoLFAf_41_clean = here("/observed/input/TogoLFAfield_40001_clean.csv"),
-  togoLFAf_42_clean = here("/observed/input/TogoLFAfield_40002_clean.csv"),
-  togoLFAg_41_clean = here("/observed/input/TogoLFAgold_40001_clean.csv"),
-  togoLFAg_42_clean = here("/observed/input/TogoLFAgold_40002_clean.csv"), 
-  togoLFAl_41_clean = here("/observed/input/TogoLFAlatex_40001_clean.csv"), 
-  togoLFAl_42_clean = here("/observed/input/TogoLFAlatex_40002_clean.csv"),
-  togoMBAc_41_clean = here("/observed/input/TogoMBAct694_40001_clean.csv"),
-  togoMBAc_42_clean = here("/observed/input/TogoMBAct694_40002_clean.csv"),
-  togoMBAp_41_clean = here("/observed/input/TogoMBAct694_40001_clean.csv"),
-  togoMBAp_42_clean = here("/observed/input/TogoMBAct694_40002_clean.csv"),
-  
-  drc1_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
-  drc1_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
-  drc1_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
-  drc2_Ct694_cleanmod = here("/model/input/DRC1Ct694_cleanmod.csv"),
-  drc2_LFA_cleanmod = here("/model/input/DRC1LFA_cleanmod.csv"),
-  drc2_MBA_cleanmod = here("/model/input/DRC1MBA_cleanmod.csv"),
-  togoLFAf_41_cleanmod = here("/model/input/TogoLFAfield_40001_cleanmod.csv"),
-  togoLFAf_42_cleanmod = here("/model/input/TogoLFAfield_40002_cleanmod.csv"),
-  togoLFAg_41_cleanmod = here("/model/input/TogoLFAgold_40001_cleanmod.csv"),
-  togoLFAg_42_cleanmod = here("/model/input/TogoLFAgold_40002_cleanmod.csv"), 
-  togoLFAl_41_cleanmod = here("/model/input/TogoLFAlatex_40001_cleanmod.csv"), 
-  togoLFAl_42_cleanmod = here("/model/input/TogoLFAlatex_40002_cleanmod.csv"),
-  togoMBAc_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
-  togoMBAc_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv"),
-  togoMBAp_41_cleanmod = here("/model/input/TogoMBAct694_40001_cleanmod.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/TogoMBAct694_40002_cleanmod.csv")
+  togoMBAp_42 = here("/clean/input/TogoMBAct694_40002.csv")
 
 )
 
-stopifnot(is_empty(files) != TRUE & length(files) == 48)
+stopifnot(is_empty(files) != TRUE & length(files) == 16)
 ## Read in data
 
-#set seed for reproducibility
-seed <- 22315
-
-## creates a list of all files
+## creates a list of all files as connections
 fileslist <- list(files$drc1_Ct694 , files$drc1_LFA, files$drc1_MBA, 
                   files$drc2_Ct694, files$drc2_LFA, files$drc2_MBA, 
                   files$togoLFAf_41, files$togoLFAf_42, files$togoLFAg_41, 
@@ -121,146 +83,36 @@ cleanlist <- lapply(fileslist, function(x) {
 
 stopifnot(length(cleanlist) == 16)
 
-#check number of rows (vary by data frame) and export to next task as 
-# individually named dataframe    #
+# add unique names to each df for easy export later on
 
-### DRC ###
-###
-drc1_ct694 <- as.data.frame(cleanlist[[1]]) 
+df_names <- c("drc1_Ct694", "drc1_LFA", "drc1_MBA", "drc2_Ct694", "drc2_LFA", 
+              "drc2_MBA", "togoLFAf_41", "togoLFAf_42", "togoLFAg_41", 
+              "togoLFAg_42", "togoLFAl_41", "togoLFAl_42", "togoMBAc_41", 
+              "togoMBAc_42", "togoMBAp_41", "togoMBAp_42")
 
-drc1_ct694  %>%
-  verify(nrow(drc1_ct694) == 1496) %>%
-  write_excel_csv(files$drc1_Ct694_clean) %>%
-  write_excel_csv(files$drc1_Ct694_cleanmod)
+names(cleanlist) <- df_names
 
-### 
-drc1_LFA <- as.data.frame(cleanlist[[2]]) 
+## using cleanlist, we extract each df and save and export result 
+## to the model and the observed tasks respectively##
 
-drc1_LFA %>%
-  verify(nrow(drc1_LFA) == 1494) %>%
-  write_excel_csv(files$drc1_LFA_clean)%>%
-  write_excel_csv(files$drc1_LFA_cleanmod)
-
-###
-
-drc1_MBA <- as.data.frame(cleanlist[[3]]) 
-
-drc1_MBA %>%
-  verify(nrow(drc1_MBA) == 1496) %>%
-  write_excel_csv(files$drc1_MBA_clean)%>%
-  write_excel_csv(files$drc1_MBA_cleanmod)
-
-###
-drc2_Ct694 <- as.data.frame(cleanlist[[4]])
-
-drc2_Ct694 %>%
-  verify(nrow(drc2_Ct694) == 1496) %>%
-  write_excel_csv(files$drc2_Ct694_clean)%>%
-  write_excel_csv(files$drc2_Ct694_cleanmod)
-
-###
-
-drc2_LFA <- as.data.frame(cleanlist[[5]]) 
-
-drc2_LFA %>%
-  verify(nrow(drc2_LFA) == 1494) %>%
-  write_excel_csv(files$drc2_LFA_clean)%>%
-  write_excel_csv(files$drc2_LFA_cleanmod)
-
-###
-
-drc2_MBA <- as.data.frame(cleanlist[[6]]) 
-
-drc2_MBA %>%
-  verify(nrow(drc2_MBA) == 1496) %>%
-  write_excel_csv(files$drc2_MBA_clean)%>%
-  write_excel_csv(files$drc2_MBA_cleanmod)
-
-###
-
-###Togo###
-###
-
-togoLFAf41 <- as.data.frame(cleanlist[[7]]) 
-
-togoLFAf41 %>%
-  verify(nrow(togoLFAf41) == 972) %>%
-  write_excel_csv(files$togoLFAf_41_clean)%>%
-  write_excel_csv(files$togoLFAf_41_cleanmod)
-
-### 
-
-togoLFAf42 <- as.data.frame(cleanlist[[8]]) 
-
-togoLFAf42 %>%
-  verify(nrow(togoLFAf42) == 945) %>%
-  write_excel_csv(files$togoLFAf_42_clean)%>%
-  write_excel_csv(files$togoLFAf_42_cleanmod)
-
-###
-
-togoLFAg41 <- as.data.frame(cleanlist[[9]]) 
-
-togoLFAg41 %>%
-  verify(nrow(togoLFAg41) == 1507) %>%
-  write_excel_csv(files$togoLFAg_41_clean)%>%
-  write_excel_csv(files$togoLFAg_41_cleanmod)
-
-###
-togoLFAg42 <- as.data.frame(cleanlist[[10]]) 
-
-togoLFAg42 %>%
-  verify(nrow(togoLFAg42) == 1305) %>%
-  write_excel_csv(files$togoLFAg_42_clean)%>%
-  write_excel_csv(files$togoLFAg_42_cleanmod)
-
-###
-
-togoLFAl41 <- as.data.frame(cleanlist[[11]]) 
-
-togoLFAl41 %>%
-  verify(nrow(togoLFAl41) == 1509) %>%
-  write_excel_csv(files$togoLFAl_41_clean)%>%
-  write_excel_csv(files$togoLFAl_41_cleanmod)
-
-###
-togoLFAl42 <- as.data.frame(cleanlist[[12]]) 
-
-togoLFAl42 %>%
-  verify(nrow(togoLFAl42) == 1187) %>%
-  write_excel_csv(files$togoLFAl_42_clean)%>%
-  write_excel_csv(files$togoLFAl_42_cleanmod)
-
-###
-togoMBAc41 <- as.data.frame(cleanlist[[13]]) 
-
-togoMBAc41 %>%
-  verify(nrow(togoMBAc41) == 1513) %>%
-  write_excel_csv(files$togoMBAc_41_clean)%>%
-  write_excel_csv(files$togoMBAc_41_cleanmod)
-
-###
-togoMBAc42 <- as.data.frame(cleanlist[[14]]) 
-
-togoMBAc42 %>%
-  verify(nrow(togoMBAc42) == 1397) %>%
-  write_excel_csv(files$togoMBAc_42_clean)%>%
-  write_excel_csv(files$togoMBAc_42_cleanmod)
-
-###
-togoMBAp41 <- as.data.frame(cleanlist[[15]]) 
-
-togoMBAp41 %>%
-  verify(nrow(togoMBAp41) == 1513) %>%
-  write_excel_csv(files$togoMBAp_41_clean)%>%
-  write_excel_csv(files$togoMBAp_41_cleanmod)
-
-###
-togoMBAp42 <- as.data.frame(cleanlist[[16]]) 
-
-togoMBAp42 %>%
-  verify(nrow(togoMBAp42) == 1397) %>%
-  write_excel_csv(files$togoMBAp_42_clean)%>%
-  write_excel_csv(files$togoMBAp_42_cleanmod)
-
+#start i loop
+for (i in seq_along(cleanlist)) 
+  {
+  
+  # start df loop
+  { 
+    df <- data.frame()
+    for (k in seq_along(cleanlist)){
+      df <- pluck(cleanlist, k)
+    }
+    
+    write_excel_csv(df, quote = FALSE, 
+                    path = 
+                      here(paste("model/input/",names(cleanlist)[i],"_cleanmod_df.csv")))
+    
+    write_excel_csv(df, quote = FALSE, 
+                    path = 
+                      here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv")))
+    } # close df loop
+  } # close i loop
 # done
