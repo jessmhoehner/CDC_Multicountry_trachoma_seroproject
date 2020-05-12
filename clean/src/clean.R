@@ -107,8 +107,9 @@ for (i in seq_along(cleanlist)) {
   write_excel_csv(df, quote = FALSE, 
                     path = 
                       here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
+  
   #message to let the user know that each iteration has completed
-  print(paste0("Modelling for dataset ",names(cleanlist)[i]," has completed successfully."))
+  print(paste0("Cleaning for dataset ",names(cleanlist)[i]," has completed successfully."))
   
   } # close i loop
 

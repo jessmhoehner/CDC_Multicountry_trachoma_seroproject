@@ -164,6 +164,9 @@ for (i in seq_along(dfs)){
   write_excel_csv(obs, quote = FALSE, path = 
                   here(paste("plot/input/",names(dfs)[i],"_obs_df.csv", sep = "")))
   
+  write_excel_csv(obs, quote = FALSE, path = 
+                    here(paste("adjust/input/",names(dfs)[i],"_obs_df.csv", sep = "")))
+  
   #message to let the user know that each iteration has completed
   print(paste0("Age seroprevalence for dataset ",names(dfs)[i]," has completed successfully."))
   
