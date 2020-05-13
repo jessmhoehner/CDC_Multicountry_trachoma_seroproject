@@ -29,22 +29,22 @@ pacman::p_load("here", "readr", "janitor",
 # change to the plot/input/ in final runs
 
 files <- list(
-  drc1_CT694_obs = here("/plot/input/drc1_Ct694_obs_df.csv"),
-  drc1_LFA_obs = here("/plot/input/drc1_LFA_obs_df.csv"),
-  drc1_MBA_obs = here("/plot/input/drc1_MBA_obs_df.csv"),
-  drc2_CT694_obs = here("/plot/input/drc2_Ct694_obs_df.csv"),
-  drc2_LFA_obs = here("/plot/input/drc2_LFA_obs_df.csv"),
-  drc2_MBA_obs = here("/plot/input/drc2_MBA_obs_df.csv"),
-  togoLFAf_41_obs = here("/plot/input/togoLFAf_41_obs_df.csv"),
-  togoLFAf_42_obs = here("/plot/input/togoLFAf_42_obs_df.csv"),
-  togoLFAg_41_obs = here("/plot/input/togoLFAg_41_obs_df.csv"),
-  togoLFAg_42_obs = here("/plot/input/togoLFAg_42_obs_df.csv"),
-  togoLFAl_41_obs = here("/plot/input/togoLFAl_41_obs_df.csv"),
-  togoLFAl_42_obs = here("/plot/input/togoLFAl_42_obs_df.csv"),
-  togoMBAc_41_obs = here("/plot/input/togoMBAc_41_obs_df.csv"),
-  togoMBAc_42_obs = here("/plot/input/togoMBAc_42_obs_df.csv"),
-  togoMBAp_41_obs = here("/plot/input/togoMBAp_41_obs_df.csv"),
-  togoMBAp_42_obs = here("/plot/input/togoMBAp_42_obs_df.csv"),
+  drc1_CT694_obs = here("plot/input/drc1_Ct694_obs_df.csv"),
+  drc1_LFA_obs = here("plot/input/drc1_LFA_obs_df.csv"),
+  drc1_MBA_obs = here("plot/input/drc1_MBA_obs_df.csv"),
+  drc2_CT694_obs = here("plot/input/drc2_Ct694_obs_df.csv"),
+  drc2_LFA_obs = here("plot/input/drc2_LFA_obs_df.csv"),
+  drc2_MBA_obs = here("plot/input/drc2_MBA_obs_df.csv"),
+  togoLFAf_41_obs = here("plot/input/togoLFAf_41_obs_df.csv"),
+  togoLFAf_42_obs = here("plot/input/togoLFAf_42_obs_df.csv"),
+  togoLFAg_41_obs = here("plot/input/togoLFAg_41_obs_df.csv"),
+  togoLFAg_42_obs = here("plot/input/togoLFAg_42_obs_df.csv"),
+  togoLFAl_41_obs = here("plot/input/togoLFAl_41_obs_df.csv"),
+  togoLFAl_42_obs = here("plot/input/togoLFAl_42_obs_df.csv"),
+  togoMBAc_41_obs = here("plot/input/togoMBAc_41_obs_df.csv"),
+  togoMBAc_42_obs = here("plot/input/togoMBAc_42_obs_df.csv"),
+  togoMBAp_41_obs = here("plot/input/togoMBAp_41_obs_df.csv"),
+  togoMBAp_42_obs = here("plot/input/togoMBAp_42_obs_df.csv"),
   
   drc1_CT694_mod = here("plot/input/drc1_Ct694_model_ests_df.csv"),
   drc1_LFA_mod = here("plot/input/drc1_LFA_model_ests_df.csv"),
@@ -179,26 +179,20 @@ suppressWarnings(
                   fill = "blue", 
                   position=pd, 
                   alpha = 0.2) + 
-      theme_classic() +
-      labs(title = "Proportion of Antibody Positivity Across Age Groups", 
-           subtitle = 
-             paste("plot of ",names(obsdfs)[j],
-                   " with 95% Confidence Interval Error Bars", sep = "")) +
-      xlab("Age") +
-      ylab("Proportion seropositive") + 
+      theme_classic() + 
       ylim(0, 1.0) +
       scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)) +
-    theme(axis.title.x = element_text(size = 14),
-          axis.title.y = element_text(size = 14),
-          axis.text.x  = element_text(size=14),
-          axis.text.y  = element_text(size=14))
+    theme(axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          axis.text.x  = element_text(size=20),
+          axis.text.y  = element_text(size=20))
   
   # save each graph individually
   ggsave(filename = here(paste("plot/output/",names(obsdfs)[j],
                                "_ageseroprev.png", sep = "")), 
          plot = last_plot(),
          device = "png",
-         dpi = 600)
+         dpi = 700)
   
   #message to let the user know that each iteration has completed
   print(paste0("Plot created for ",names(obsdfs)[j]))
