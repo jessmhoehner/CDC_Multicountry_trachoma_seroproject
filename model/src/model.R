@@ -52,7 +52,7 @@ files <- list(
   togoMBAc_41_cleanmod = here("/model/input/togoMBAc_41_cleanmod_df.csv"),
   togoMBAc_42_cleanmod = here("/model/input/togoMBAc_42_cleanmod_df.csv"),
   togoMBAp_41_cleanmod = here("/model/input/togoMBAp_41_cleanmod_df.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv"),
+  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv")
   )
 
 stopifnot(length(files) == 16)
@@ -125,7 +125,6 @@ model_M1 <- cmpfun(model_M1, options=list(optimize=3))
 
   ###################################################
   ## 1.2 LIKELIHOOD
-  ## changed where the model refers to column number to specific column name
   
   # define the loglike_M1 function 
   loglike_M1 <- function(par_M1)
