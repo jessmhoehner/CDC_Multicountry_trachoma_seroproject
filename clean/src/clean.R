@@ -108,6 +108,10 @@ for (i in seq_along(cleanlist)) {
                     path = 
                       here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
   
+  write_excel_csv(df, quote = FALSE, 
+                  path = 
+                    here(paste("plot/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
+  
   #message to let the user know that each iteration has completed
   print(paste0("Cleaning for dataset ",names(cleanlist)[i]," has completed successfully."))
   
