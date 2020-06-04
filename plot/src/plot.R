@@ -29,6 +29,24 @@ pacman::p_load("here", "readr", "janitor",
 # change to the plot/input/ in final runs
 
 files <- list(
+  
+  drc1_Ct694_clean = here("plot/input/drc1_Ct694_cleanobs_df.csv"),
+  drc1_LFA_clean = here("plot/input/drc1_LFA_cleanobs_df.csv"),
+  drc1_MBA_clean = here("plot/input/drc1_MBA_cleanobs_df.csv"),
+  drc2_Ct694_clean = here("plot/input/drc2_Ct694_cleanobs_df.csv"),
+  drc2_LFA_clean = here("plot/input/drc2_LFA_cleanobs_df.csv"),
+  drc2_MBA_clean = here("plot/input/drc2_MBA_cleanobs_df.csv"),
+  togoLFAf_41_clean = here("plot/input/togoLFAf_41_cleanobs_df.csv"),
+  togoLFAf_42_clean = here("plot/input/togoLFAf_42_cleanobs_df.csv"),
+  togoLFAg_41_clean = here("plot/input/togoLFAg_41_cleanobs_df.csv"),
+  togoLFAg_42_clean = here("plot/input/togoLFAg_42_cleanobs_df.csv"), 
+  togoLFAl_41_clean = here("plot/input/togoLFAl_41_cleanobs_df.csv"), 
+  togoLFAl_42_clean = here("plot/input/togoLFAl_42_cleanobs_df.csv"),
+  togoMBAc_41_clean = here("plot/input/togoMBAc_41_cleanobs_df.csv"),
+  togoMBAc_42_clean = here("plot/input/togoMBAc_42_cleanobs_df.csv"),
+  togoMBAp_41_clean = here("plot/input/togoMBAp_41_cleanobs_df.csv"),
+  togoMBAp_42_clean = here("plot/input/togoMBAp_42_cleanobs_df.csv"),
+  
   drc1_CT694_obs = here("plot/input/drc1_Ct694_obs_df.csv"),
   drc1_LFA_obs = here("plot/input/drc1_LFA_obs_df.csv"),
   drc1_MBA_obs = here("plot/input/drc1_MBA_obs_df.csv"),
@@ -61,11 +79,47 @@ files <- list(
   togoMBAc_41_mod = here("plot/input/togoMBAc_41_model_ests_df.csv"),
   togoMBAc_42_mod = here("plot/input/togoMBAc_42_model_ests_df.csv"),
   togoMBAp_41_mod = here("plot/input/togoMBAp_41_model_ests_df.csv"),
-  togoMBAp_42_mod = here("plot/input/togoMBAp_42_model_ests_df.csv")
+  togoMBAp_42_mod = here("plot/input/togoMBAp_42_model_ests_df.csv") 
+  
 
 )
 
-stopifnot(is_empty(files) != TRUE & length(files) == 32)
+stopifnot(is_empty(files) != TRUE & length(files) == 48)
+
+
+###########Figure 2 #####################################################
+# y axis should be on a log scale but not log transformed
+# use jitter to show as many dots as possible
+
+# testing #
+
+test_df <- as.data.frame(read_csv(files$drc1_Ct694_clean)) %>%
+  clean_names()
+
+
+ggplot(test_df, aes(age, titre, 
+                    group = age)) +
+  geom_boxplot(aes(age, titre), 
+               color = "blue",
+               fill = "blue", 
+               alpha = 0.2,
+               position=pd, 
+               outlier.colour = "white") +
+  theme_classic() + 
+  geom_jitter(na.rm = FALSE, 
+              width = 0.16) +
+  scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x  = element_text(size=20),
+        axis.text.y  = element_text(size=20))
+
+
+####################################################################
+
+
+
+########## Figure 3 #####################################################
 
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
