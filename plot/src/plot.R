@@ -86,55 +86,102 @@ files <- list(
 
 stopifnot(is_empty(files) != TRUE & length(files) == 48)
 
-
 ###########Figure 2 #####################################################
-# y axis should be on a log scale but not log transformed
-# use jitter to show as many dots as possible
 
-# testing #
+## creates a list of files of MBA results as connections
+cleanlist <- list(files$drc1_Ct694_clean,files$drc1_MBA_clean,
+                  files$drc2_Ct694_clean,files$drc2_MBA_clean,
+                  files$togoMBAc_41_clean,files$togoMBAc_42_clean,
+                  files$togoMBAp_41_clean,files$togoMBAp_42_clean)
 
-test_df <- as.data.frame(read_csv(files$drc1_Ct694_clean)) %>%
-  clean_names()
+stopifnot(length(cleanlist) == 8)
+stopifnot(cleanlist %in% files == TRUE)
 
+# creates a list called cleandfs, containing dataframes created from clean data
+cleandfs <- lapply(cleanlist, function(x) {
+  
+  y_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
+    clean_names() %>%
+    transmute(age = as.numeric(age), 
+              titre = as.numeric(titre), 
+              sero_pos = as.factor(sero_pos))
+  
+  y_df  %>%
+    verify(ncol(y_df) == 3)  %>%
+    verify(is.na(y_df) == FALSE)
+  
+})
 
-ggplot(test_df, aes(age, titre, 
-                    group = age)) +
-  geom_boxplot(aes(age, titre), 
-               color = "blue",
-               fill = "blue", 
-               alpha = 0.2,
-               position=pd, 
-               outlier.colour = "white") +
-  theme_classic() + 
-  geom_jitter(na.rm = FALSE, 
-              width = 0.16) +
-  scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)) +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank(),
-        axis.text.x  = element_text(size=20),
-        axis.text.y  = element_text(size=20))
+# add names for each df in the list corresponding to appropriate names for each
+# spreadheet, in this case country and associated unit and assay information
+# this is used for subtitles and unique file names
 
+df_clean_names <- c("Manono CT694 MBA", "Manono Pgp3 MBA","Nyemba CT694 MBA",
+                    "Nyemba Pgp3 MBA", "Keran CT694 MBA", "Anie CT694 MBA", 
+                    "Keran Pgp3 MBA","Anie Pgp3 MBA")
 
-####################################################################
-
-
-
-########## Figure 3 #####################################################
+names(cleandfs) <- df_clean_names
 
 pd <- position_dodge(0.1) # move them .05 to the left and right
 
-## creates a list of all files as connections
+#start k loop
+suppressWarnings(
+  for (k in seq_along(cleanlist)){
+    
+    #messages for the user to keep them aware of model progress
+    print(paste0("Creating plotting dataset for ",names(cleandfs)[k]))
+    
+    df_clean <- as.data.frame(pluck(cleandfs, k))
+    
+    titre_plot<-ggplot(df_clean, aes(age, titre, group = age)) +
+      geom_boxplot(aes(age, titre), 
+                   color = "blue", 
+                   fill = "blue", 
+                   alpha = 0.2,
+                   position=pd, 
+                   outlier.colour = "white") +
+      theme_classic() + 
+      geom_jitter(na.rm = FALSE, 
+                  width = 0.3) +
+      scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9)) +
+      scale_y_log10(breaks=c(1, 1500, 15000, 150000),
+                    labels = c(1, 1500, 15000, 150000),
+                    limits=c(1,150000)) +
+      coord_trans(y = scales::exp_trans()) +
+      theme(axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x  = element_text(size=20),
+            axis.text.y  = element_text(size=20))
+    
+    # save each graph individually
+    ggsave(filename = here(paste("plot/output/antibodyresponse/",names(cleandfs)[k],
+                                 "_antibodyresponse.png", sep = "")), 
+           plot = last_plot(),
+           device = "png",
+           dpi = 700)
+    
+    #message to let the user know that each iteration has completed
+    print(paste0("Plot created for ",names(cleandfs)[k]))
+    
+  }
+  
+)
+
+#########################################################################
+########## Figure 3 #####################################################
+
 obslist <- list(files$drc1_CT694_obs,files$drc1_LFA_obs,files$drc1_MBA_obs,
                 files$drc2_CT694_obs,files$drc2_LFA_obs,files$drc2_MBA_obs,
-                files$togoLFAf_41_obs,files$togoLFAf_42_obs, files$togoLFAg_41_obs,
-                files$togoLFAg_42_obs,files$togoLFAl_41_obs,files$togoLFAl_42_obs,
-                files$togoMBAc_41_obs,files$togoMBAc_42_obs,files$togoMBAp_41_obs,
-                files$togoMBAp_42_obs)
+                files$togoLFAf_41_obs,files$togoLFAf_42_obs,
+                files$togoLFAg_41_obs,files$togoLFAg_42_obs,
+                files$togoLFAl_41_obs,files$togoLFAl_42_obs,
+                files$togoMBAc_41_obs,files$togoMBAc_42_obs,
+                files$togoMBAp_41_obs,files$togoMBAp_42_obs)
 
 stopifnot(length(obslist) == 16)
-stopifnot(obslist %in% files == TRUE)
+stopifnot(pbslist %in% files == TRUE)
 
-# creates a list called obsdfs, containing all 16 dataframes created from obs data
+# creates a list called obsdfs, containing all 16 dataframes
 obsdfs <- lapply(obslist, function(x) {
   
   x_df <- as.data.frame(read_csv(x, col_names = TRUE, na = "NA")) %>%
@@ -157,10 +204,11 @@ obsdfs <- lapply(obslist, function(x) {
 # creates a list called moddfs, containing all 16 dataframes created from modeled data
 modlist <- list(files$drc1_CT694_mod,files$drc1_LFA_mod,files$drc1_MBA_mod,
                 files$drc2_CT694_mod,files$drc2_LFA_mod,files$drc2_MBA_mod,
-                files$togoLFAf_41_mod,files$togoLFAf_42_mod, files$togoLFAg_41_mod,
-                files$togoLFAg_42_mod,files$togoLFAl_41_mod,files$togoLFAl_42_mod,
-                files$togoMBAc_41_mod,files$togoMBAc_42_mod,files$togoMBAp_41_mod,
-                files$togoMBAp_42_mod)
+                files$togoLFAf_41_mod,files$togoLFAf_42_mod, 
+                files$togoLFAg_41_mod,files$togoLFAg_42_mod,
+                files$togoLFAl_41_mod,files$togoLFAl_42_mod,
+                files$togoMBAc_41_mod,files$togoMBAc_42_mod,
+                files$togoMBAp_41_mod,files$togoMBAp_42_mod)
 
 stopifnot(length(modlist) == 16)
 stopifnot(modlist %in% files == TRUE)
@@ -182,19 +230,15 @@ moddfs <- lapply(modlist, function(x) {
   
 })
 
-# add names for each df in the list corresponding to appropriate names for each
-# spreadheet, in this case country and associated unit and assay information
-# this is used for subtitles and unique file names
+df_obs_names <- c("Manono CT694 MBA", "Manono LFA Latex", "Manono Pgp3 MBA", 
+                     "Nyemba CT694 MBA", "Nyemba LFA Latex", "Nyemba Pgp3 MBA", 
+                     "Keran LFA (Field)", "Anie LFA (Field)", "Keran LFA (Gold)", 
+                     "Anie LFA (Gold)", "Keran LFA (Latex)", "Anie LFA (Latex)", 
+                     "Keran CT694 MBA", "Anie CT694 MBA", "Keran Pgp3 MBA", 
+                     "Anie Pgp3 MBA")
 
-df_names <- c("Manono CT694 MBA", "Manono LFA Latex", "Manono Pgp3 MBA", 
-              "Nyemba CT694 MBA", "Nyemba LFA Latex", "Nyemba Pgp3 MBA", 
-              "Keran LFA (Field)", "Anie LFA (Field)", "Keran LFA (Gold)", 
-          "Anie LFA (Gold)", "Keran LFA (Latex)", "Anie LFA (Latex)", 
-          "Keran CT694 MBA", "Anie CT694 MBA", "Keran Pgp3 MBA", 
-          "Anie Pgp3 MBA")
-
-names(obsdfs) <- df_names
-names(moddfs) <- df_names
+names(obsdfs) <- df_obs_names
+names(moddfs) <- df_obs_names
 
 ## using dfs, we extract each df and combine them as needed for each graph
 # initialize empty dfs
@@ -242,7 +286,7 @@ suppressWarnings(
           axis.text.y  = element_text(size=20))
   
   # save each graph individually
-  ggsave(filename = here(paste("plot/output/",names(obsdfs)[j],
+  ggsave(filename = here(paste("plot/output/ageseroprev/",names(obsdfs)[j],
                                "_ageseroprev.png", sep = "")), 
          plot = last_plot(),
          device = "png",
@@ -254,7 +298,6 @@ suppressWarnings(
 }
 
 )
-
 
 # Suppressed warnings because 
 # "Removed 37 rows containing missing values (geom_pointrange)" is because
