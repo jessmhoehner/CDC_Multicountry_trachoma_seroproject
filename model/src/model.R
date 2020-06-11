@@ -37,22 +37,22 @@ pacman::p_load("here", "MASS", "compiler",
 
 # creates a list of all filepaths to data to be read into the script
 files <- list(
-  drc1_Ct694_cleanmod = here("/model/input/drc1_Ct694_cleanmod_df.csv"),
-  drc1_LFA_cleanmod = here("/model/input/drc1_LFA_cleanmod_df.csv"),
-  drc1_MBA_cleanmod = here("/model/input/drc1_MBA_cleanmod_df.csv"),
-  drc2_Ct694_cleanmod = here("/model/input/drc2_Ct694_cleanmod_df.csv"),
-  drc2_LFA_cleanmod = here("/model/input/drc2_LFA_cleanmod_df.csv"),
-  drc2_MBA_cleanmod = here("/model/input/drc2_MBA_cleanmod_df.csv"),
-  togoLFAf_41_cleanmod = here("/model/input/togoLFAf_41_cleanmod_df.csv"),
-  togoLFAf_42_cleanmod = here("/model/input/togoLFAf_42_cleanmod_df.csv"),
-  togoLFAg_41_cleanmod = here("/model/input/togoLFAg_41_cleanmod_df.csv"),
-  togoLFAg_42_cleanmod = here("/model/input/togoLFAg_42_cleanmod_df.csv"), 
-  togoLFAl_41_cleanmod = here("/model/input/togoLFAl_41_cleanmod_df.csv"), 
-  togoLFAl_42_cleanmod = here("/model/input/togoLFAl_42_cleanmod_df.csv"),
-  togoMBAc_41_cleanmod = here("/model/input/togoMBAc_41_cleanmod_df.csv"),
-  togoMBAc_42_cleanmod = here("/model/input/togoMBAc_42_cleanmod_df.csv"),
-  togoMBAp_41_cleanmod = here("/model/input/togoMBAp_41_cleanmod_df.csv"),
-  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod_df.csv")
+  drc1_Ct694_cleanmod = here("/model/input/drc1_Ct694_cleanmod.csv"),
+  drc1_LFA_cleanmod = here("/model/input/drc1_LFA_cleanmod.csv"),
+  drc1_MBA_cleanmod = here("/model/input/drc1_MBA_cleanmod.csv"),
+  drc2_Ct694_cleanmod = here("/model/input/drc2_Ct694_cleanmod.csv"),
+  drc2_LFA_cleanmod = here("/model/input/drc2_LFA_cleanmod.csv"),
+  drc2_MBA_cleanmod = here("/model/input/drc2_MBA_cleanmod.csv"),
+  togoLFAf_41_cleanmod = here("/model/input/togoLFAf_41_cleanmod.csv"),
+  togoLFAf_42_cleanmod = here("/model/input/togoLFAf_42_cleanmod.csv"),
+  togoLFAg_41_cleanmod = here("/model/input/togoLFAg_41_cleanmod.csv"),
+  togoLFAg_42_cleanmod = here("/model/input/togoLFAg_42_cleanmod.csv"), 
+  togoLFAl_41_cleanmod = here("/model/input/togoLFAl_41_cleanmod.csv"), 
+  togoLFAl_42_cleanmod = here("/model/input/togoLFAl_42_cleanmod.csv"),
+  togoMBAc_41_cleanmod = here("/model/input/togoMBAc_41_cleanmod.csv"),
+  togoMBAc_42_cleanmod = here("/model/input/togoMBAc_42_cleanmod.csv"),
+  togoMBAp_41_cleanmod = here("/model/input/togoMBAp_41_cleanmod.csv"),
+  togoMBAp_42_cleanmod = here("/model/input/togoMBAp_42_cleanmod.csv")
   )
 
 stopifnot(length(files) == 16)
@@ -289,7 +289,17 @@ loglike_M1 <- cmpfun(loglike_M1, options=list(optimize=3))
       M1_quant[,m] = quantile(M1_predict[,m], prob=c(0.025, 0.5, 0.975),seed = seed)
     } # end m loop
     
-  quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975))
+  # obtain and export SCR estimates for each site (med, lcl, ucl)
+  
+  SCR = as.data.frame(t(quantile(MCMC_burn[,1], prob=c(0.5, 0.025, 0.975)))) %>%
+    transmute(lamba = as.numeric(`50%`), 
+              ucl_est = as.numeric(`2.5%`), 
+              lcl_est = as.numeric(`97.5%`))
+  
+  write_excel_csv(SCR, quote = FALSE, 
+                  path = 
+                    here(paste("model/output/",names(dfs)[i],"_scr_ests.csv", 
+                               sep = "")))
 
   ###################################################
   # join the model estimates (med, lcl, ucl) and save as new dataframe
@@ -317,7 +327,7 @@ loglike_M1 <- cmpfun(loglike_M1, options=list(optimize=3))
   
   write_excel_csv(model_ests_df, quote = FALSE, 
                   path = 
-                    here(paste("plot/input/",names(dfs)[i],"_model_ests_df.csv", sep = "")))
+                    here(paste("plot/input/",names(dfs)[i],"_model_ests.csv", sep = "")))
   
   #message to let the user know that each iteration has completed
   print(paste0("Modelling for dataset ",names(dfs)[i]," has completed successfully."))

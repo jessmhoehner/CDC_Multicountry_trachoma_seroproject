@@ -40,9 +40,9 @@ files <- list(drc1_Ct694_prevs =
               ageweights_drc_clean = 
                 here("adjust/output/age_weights_DRC.csv"),
               age_adj_prevs = 
-                here("adjust/output/DRCCt694_ageadjustedprevs"),
+                here("adjust/output/DRCCt694_ageadjustedprevs.csv"),
               values_table = 
-                here("adjust/output/DRCCt694_overallvaluestable")
+                here("adjust/output/DRCCt694_overallvaluestable.csv")
 )
 
 # read in observed prevalence data
@@ -72,8 +72,12 @@ stopifnot(length(adjlist ) == 6)
 
 # add unique names to each df for easy export later on
 
-df_names <- c("drc1_CT694", "drc1_LFA", "drc1_MBA", "drc2_CT694", "drc2_LFA", 
-              "drc2_MBA")
+df_names <- c("drc1_CT694", 
+              "drc1_LFA", 
+              "drc1_PgP3", 
+              "drc2_CT694", 
+              "drc2_LFA", 
+              "drc2_Pgp3")
 
 names(adjlist) <- df_names
 

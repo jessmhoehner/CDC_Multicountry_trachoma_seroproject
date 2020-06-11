@@ -102,18 +102,22 @@ for (i in seq_along(cleanlist)) {
   
   write_excel_csv(df, quote = FALSE, 
                   path = 
-                      here(paste("model/input/",names(cleanlist)[i],"_cleanmod_df.csv", sep = "")))
+                      here(paste("model/input/",names(cleanlist)[i],
+                                 "_cleanmod.csv", sep = "")))
   
   write_excel_csv(df, quote = FALSE, 
                     path = 
-                      here(paste("observed/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
+                      here(paste("observed/input/",names(cleanlist)[i],
+                                 "_cleanobs.csv", sep = "")))
   
   write_excel_csv(df, quote = FALSE, 
                   path = 
-                    here(paste("plot/input/",names(cleanlist)[i],"_cleanobs_df.csv", sep = "")))
+                    here(paste("plot/input/",names(cleanlist)[i],
+                               "_cleanobs.csv", sep = "")))
   
   #message to let the user know that each iteration has completed
-  print(paste0("Cleaning for dataset ",names(cleanlist)[i]," has completed successfully."))
+  print(paste0("Cleaning for dataset ",names(cleanlist)[i],
+               " has completed successfully."))
   
   } # close i loop
 

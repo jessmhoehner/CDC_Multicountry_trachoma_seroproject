@@ -33,22 +33,22 @@ pacman::p_load("here","readr", "janitor", "tidyverse", "assertr", "binom")
 # specify file structure of inputs and outputs
 
 files <- list(
-  drc1_Ct694_clean = here("observed/input/drc1_Ct694_cleanobs_df.csv"),
-  drc1_LFA_clean = here("observed/input/drc1_LFA_cleanobs_df.csv"),
-  drc1_MBA_clean = here("observed/input/drc1_MBA_cleanobs_df.csv"),
-  drc2_Ct694_clean = here("observed/input/drc2_Ct694_cleanobs_df.csv"),
-  drc2_LFA_clean = here("observed/input/drc2_LFA_cleanobs_df.csv"),
-  drc2_MBA_clean = here("observed/input/drc2_MBA_cleanobs_df.csv"),
-  togoLFAf_41_clean = here("observed/input/togoLFAf_41_cleanobs_df.csv"),
-  togoLFAf_42_clean = here("observed/input/togoLFAf_42_cleanobs_df.csv"),
-  togoLFAg_41_clean = here("observed/input/togoLFAg_41_cleanobs_df.csv"),
-  togoLFAg_42_clean = here("observed/input/togoLFAg_42_cleanobs_df.csv"), 
-  togoLFAl_41_clean = here("observed/input/togoLFAl_41_cleanobs_df.csv"), 
-  togoLFAl_42_clean = here("observed/input/togoLFAl_42_cleanobs_df.csv"),
-  togoMBAc_41_clean = here("observed/input/togoMBAc_41_cleanobs_df.csv"),
-  togoMBAc_42_clean = here("observed/input/togoMBAc_42_cleanobs_df.csv"),
-  togoMBAp_41_clean = here("observed/input/togoMBAp_41_cleanobs_df.csv"),
-  togoMBAp_42_clean = here("observed/input/togoMBAp_42_cleanobs_df.csv")
+  drc1_Ct694_clean = here("observed/input/drc1_Ct694_cleanobs.csv"),
+  drc1_LFA_clean = here("observed/input/drc1_LFA_cleanobs.csv"),
+  drc1_MBA_clean = here("observed/input/drc1_MBA_cleanobs.csv"),
+  drc2_Ct694_clean = here("observed/input/drc2_Ct694_cleanobs.csv"),
+  drc2_LFA_clean = here("observed/input/drc2_LFA_cleanobs.csv"),
+  drc2_MBA_clean = here("observed/input/drc2_MBA_cleanobs.csv"),
+  togoLFAf_41_clean = here("observed/input/togoLFAf_41_cleanobs.csv"),
+  togoLFAf_42_clean = here("observed/input/togoLFAf_42_cleanobs.csv"),
+  togoLFAg_41_clean = here("observed/input/togoLFAg_41_cleanobs.csv"),
+  togoLFAg_42_clean = here("observed/input/togoLFAg_42_cleanobs.csv"), 
+  togoLFAl_41_clean = here("observed/input/togoLFAl_41_cleanobs.csv"), 
+  togoLFAl_42_clean = here("observed/input/togoLFAl_42_cleanobs.csv"),
+  togoMBAc_41_clean = here("observed/input/togoMBAc_41_cleanobs.csv"),
+  togoMBAc_42_clean = here("observed/input/togoMBAc_42_cleanobs.csv"),
+  togoMBAp_41_clean = here("observed/input/togoMBAp_41_cleanobs.csv"),
+  togoMBAp_42_clean = here("observed/input/togoMBAp_42_cleanobs.csv")
 )
 
 stopifnot(is_empty(files) != TRUE & length(files) == 16)
@@ -162,10 +162,10 @@ for (i in seq_along(dfs)){
 
   # export each df to plot task
   write_excel_csv(obs, quote = FALSE, path = 
-                  here(paste("plot/input/",names(dfs)[i],"_obs_df.csv", sep = "")))
+                  here(paste("plot/input/",names(dfs)[i],"_obs.csv", sep = "")))
   
   write_excel_csv(obs, quote = FALSE, path = 
-                    here(paste("adjust/input/",names(dfs)[i],"_obs_df.csv", sep = "")))
+                    here(paste("adjust/input/",names(dfs)[i],"_obs.csv", sep = "")))
   
   #message to let the user know that each iteration has completed
   print(paste0("Age seroprevalence for dataset ",names(dfs)[i]," has completed successfully."))
