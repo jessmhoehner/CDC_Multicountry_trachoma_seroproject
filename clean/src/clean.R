@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript --vanilla
 # set expandtab ft=R ts=4 sw=4 ai fileencoding=utf-7
 #
-# Author: JR
-# Maintainer(s): JR
-# License: 2020, EICC, GPL v2 or later
+# Author: JH
+# Maintainer(s): JH
+# License: 2020, GPL v2 or later
 #
 # -----------------------------------------------------------
 # multicountrytrachseroproject/clean/src/clean.R
@@ -16,8 +16,8 @@
 ## Please feel free to share or modify the code as you see fit     ##   
 ## but please maintain appropriate accreditation)                  ##
 ##                                                                 ##   
-## Jessica Randall                                                 ##
-## github.com/jessmrandall                                         ##
+## Jessica Hoehner (nee Randall)                                             ##
+## github.com/jessmhoehner                                     ##
 
 ## this script reads in individual .csvs with age, titre, and sero_pos columns
 ## after reading in it make sure none of the sheets are empty, they each have
