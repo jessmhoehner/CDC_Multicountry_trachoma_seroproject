@@ -257,15 +257,3 @@ ggplot(plot_df_togo, aes(age, med, age_bins_mid)) +
     axis.text.y = element_text(size = 16))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
