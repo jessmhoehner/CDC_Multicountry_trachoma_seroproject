@@ -8,7 +8,7 @@
 # -----------------------------------------------------------
 # multicountrytrachseroproject/model/src/model.R
 
-####################################################################
+#####################################################################
 ## Modeling code for                                               ##
 ## "Comparison of platforms for testing antibodies to Chlamydia    ##
 ## trachomatis antigens: data from the Democratic Republic of the  ##
@@ -27,7 +27,6 @@
 ## Institut Pasteur                                                ##
 ## michael.white@pasteur.fr                                        ##
 ##                                                                 ##
-#####################################################################
 #####################################################################
 
 # load libraries
