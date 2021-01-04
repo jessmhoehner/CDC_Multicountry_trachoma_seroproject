@@ -3,21 +3,21 @@
 #
 # Author: JH
 # Maintainer(s): JH
-# License: 2020, GPL v2 or later
+# License: 2021, GPL v3 or later
 #
 # -----------------------------------------------------------
 # multicountrytrachseroproject/clean/src/clean.R
 
 ## Cleaning code for                                               ##
-## "Comparison of multiple tests for determination of              ##
-## seroconversion rates to the Chlamydia trachomatis antigen       ##
-## Pgp3: a multi-country analysis"                                 ##
+## "Comparison of platforms for testing antibodies to Chlamydia    ##
+## trachomatis antigens: data from the Democratic Republic of the  ##
+## Congo and Togo"                                                 ##
 ##                                                                 ##
 ## Please feel free to share or modify the code as you see fit     ##
 ## but please maintain appropriate accreditation)                  ##
 ##                                                                 ##
-## Jessica Hoehner (nee Randall)                                             ##
-## github.com/jessmhoehner                                     ##
+## Jessica Hoehner (nee Randall)                                   ##
+## github.com/jessmhoehner                                         ##
 
 ## this script reads in individual .csvs with age, titre, and sero_pos columns
 ## after reading in it make sure none of the sheets are empty, they each have

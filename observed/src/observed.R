@@ -1,18 +1,18 @@
 #!/usr/bin/env Rscript --vanilla
 # set expandtab ft=R ts=4 sw=4 ai fileencoding=utf-7
 #
-# Author: JR
-# Maintainer(s): JR
-# License: 2020, EICC, GPL v2 or later
+# Author: JH
+# Maintainer(s): JH
+# License: 2021, GPL v3 or later
 #
 # -----------------------------------------------------------
 # multicountrytrachseroproject/clean/src/clean.R
 
 ## Code for obtaining seroprevalence proportions by age group and  ##
 ## binomial confidence intervals for                               ##
-## "Comparison of multiple tests for determination of              ##
-## seroconversion rates to the Chlamydia trachomatis antigen       ##
-## Pgp3: a multi-country analysis"                                 ##
+## "Comparison of platforms for testing antibodies to Chlamydia    ##
+## trachomatis antigens: data from the Democratic Republic of the  ##
+## Congo and Togo"                                                 ##
 ##                                                                 ##
 ## Please feel free to share or modify the code as you see fit     ##
 ## but please maintain appropriate accreditation)                  ##
