@@ -16,7 +16,7 @@
 ## Please feel free to share or modify the code as you see fit     ##
 ## but please maintain appropriate accreditation)                  ##
 ##                                                                 ##
-## Jessica Randall                                                 ##
+## Jessica Hoehner                                                 ##
 ## github.com/jessmhoehner                                         ##
 #####################################################################
 
@@ -177,7 +177,6 @@ suppressWarnings(
   }
 )
 
-#########################################################################
 ########## Figure 3 #####################################################
 
 obslist <- list(
