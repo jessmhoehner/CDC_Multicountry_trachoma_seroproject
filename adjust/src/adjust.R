@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript --vanilla
 # set expandtab ft=R ts=4 sw=4 ai fileencoding=utf-7
 #
-# Author: JR
-# Maintainer(s): JR
-# License: 2020, EICC, GPL v2 or later
+# Author: JH
+# Maintainer(s): JH
+# License: 2020, GPL v2 or later
 #
 # -----------------------------------------------------------
 # multicountrytrachseroproject/adjust/src/adjust.R
@@ -16,8 +16,8 @@
 ## Please feel free to share or modify the code as you see fit     ##   
 ## but please maintain appropriate accreditation)                  ##
 ##                                                                 ##   
-## Jessica Randall                                                 ##
-## github.com/jessmrandall                                         ##
+## Jessica Hoehner                                                 ##
+## github.com/jessmhoehner                                         ##
 
 ## this script adjusts the observed sero prevalences in the input  ##
 ## csvs by age weights provided from Tropical Data                 ##
