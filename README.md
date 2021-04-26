@@ -22,7 +22,3 @@ Project structure
       - input (cleaned and prepared files from the observed and model tasks)
       - output ( all original figures generated from analysis)
       - src (script to make figures)
- 6. write
-	- contains files from clean task, rest come from plot task
-	- output (contains report and image files)
-	- src (contains R markdown file)
