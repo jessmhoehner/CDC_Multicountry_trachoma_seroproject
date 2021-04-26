@@ -4,6 +4,8 @@ Code for the manuscript:
 "Comparison of platforms for testing antibodies to Chlamydia trachomatis 
 antigens: data from the Democratic Republic of the Congo and Togo"
 
+Gwyn, S., Awoussi, M.S., Bakhtiari, A. et al. Comparison of platforms for testing antibodies to Chlamydia trachomatis antigens in the Democratic Republic of the Congo and Togo. Sci Rep 11, 7225 (2021). https://doi.org/10.1038/s41598-021-86639-8
+
 Project structure
 <br>
   1. clean
