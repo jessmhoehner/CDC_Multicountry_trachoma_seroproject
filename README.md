@@ -1,7 +1,7 @@
 Code for the manuscript:
 <br>
 <br>
-"Comparison of platforms for Gwyn, S., Awoussi, M.S., Bakhtiari, A. et al. Comparison of platforms for testing antibodies to Chlamydia trachomatis antigens in the Democratic Republic of the Congo and Togo. Sci Rep 11, 7225 (2021). https://doi.org/10.1038/s41598-021-86639-8
+"Comparison of platforms for testing antibodies to Chlamydia trachomatis antigens in the Democratic Republic of the Congo and Togo. Sci Rep 11, 7225 (2021). https://doi.org/10.1038/s41598-021-86639-8
 
 Project structure
 <br>
